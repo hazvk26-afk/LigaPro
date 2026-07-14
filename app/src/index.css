@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,700;1,400&family=Montserrat:wght@400;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-barlow: "Barlow Condensed", sans-serif;
+
+  /* Brand Colors from DESIGN.md */
+  --color-brand-surface: #f8f9fa;
+  --color-brand-surface-dim: #d9dadb;
+  --color-brand-surface-bright: #f8f9fa;
+  --color-brand-surface-lowest: #ffffff;
+  --color-brand-surface-low: #f3f4f5;
+  --color-brand-surface-container: #edeeef;
+  --color-brand-surface-high: #e7e8e9;
+  --color-brand-surface-highest: #e1e3e4;
+  --color-brand-on-surface: #191c1d;
+  --color-brand-on-surface-variant: #43474e;
+  --color-brand-inverse-surface: #2e3132;
+  --color-brand-inverse-on-surface: #f0f1f2;
+  
+  --color-brand-outline: #74777f;
+  --color-brand-outline-variant: #c4c6cf;
+  
+  --color-brand-primary: #000613;
+  --color-brand-on-primary: #ffffff;
+  --color-brand-primary-container: #001f3f;
+  --color-brand-on-primary-container: #6f88ad;
+  --color-brand-inverse-primary: #afc8f0;
+  
+  --color-brand-secondary: #735c00;
+  --color-brand-on-secondary: #ffffff;
+  --color-brand-secondary-container: #fed65b;
+  --color-brand-on-secondary-container: #745c00;
+  
+  --color-brand-tertiary: #160000;
+  --color-brand-on-tertiary: #ffffff;
+  --color-brand-tertiary-container: #470001;
+  --color-brand-on-tertiary-container: #fa3d33;
+  
+  --color-brand-error: #ba1a1a;
+  --color-brand-on-error: #ffffff;
+  --color-brand-error-container: #ffdad6;
+  --color-brand-on-error-container: #93000a;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-barlow);
+  background-color: var(--color-brand-surface);
+  color: var(--color-brand-on-surface);
+}

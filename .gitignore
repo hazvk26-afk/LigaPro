@@ -1,0 +1,17 @@
+# Dependency directories
+app/node_modules/
+
+# Build outputs
+app/dist/
+app/node_modules/.tmp/
+
+# Local env files
+app/.env
+app/.env.local
+app/.env.development.local
+app/.env.test.local
+app/.env.production.local
+
+# OS files
+.DS_Store
+Thumbs.db

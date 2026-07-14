@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LigaPro Admin - Perfil de Usuario</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&amp;family=Barlow+Condensed:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d9dadb",
+                    "primary-container": "#001f3f",
+                    "on-surface-variant": "#43474e",
+                    "on-secondary-fixed": "#241a00",
+                    "tertiary-fixed-dim": "#ffb4aa",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-container": "#fa3d33",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-primary": "#afc8f0",
+                    "inverse-surface": "#2e3132",
+                    "outline": "#74777f",
+                    "surface-container-high": "#e7e8e9",
+                    "primary-fixed-dim": "#afc8f0",
+                    "primary": "#000613",
+                    "outline-variant": "#c4c6cf",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary-container": "#6f88ad",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#ffdad5",
+                    "secondary-fixed-dim": "#e9c349",
+                    "secondary-container": "#fed65b",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#2f486a",
+                    "on-primary-fixed": "#001c3a",
+                    "background": "#f8f9fa",
+                    "tertiary": "#160000",
+                    "on-surface": "#191c1d",
+                    "surface-tint": "#476083",
+                    "secondary": "#735c00",
+                    "on-tertiary-fixed": "#410001",
+                    "tertiary-container": "#470001",
+                    "inverse-on-surface": "#f0f1f2",
+                    "surface-variant": "#e1e3e4",
+                    "secondary-fixed": "#ffe088",
+                    "on-tertiary-fixed-variant": "#930007",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-fixed": "#d4e3ff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#745c00",
+                    "surface-container": "#edeeef",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-fixed-variant": "#574500",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "xs": "4px",
+                    "md": "24px",
+                    "lg": "48px",
+                    "xl": "80px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "label-bold": ["Barlow Condensed"],
+                    "body-lg": ["Barlow Condensed"],
+                    "body-md": ["Barlow Condensed"],
+                    "headline-md": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "stats-number": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"]
+            },
+            "fontSize": {
+                    "label-bold": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "stats-number": ["24px", {"lineHeight": "24px", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-tab {
+            background-color: #fed65b; /* secondary-container */
+            color: #745c00; /* on-secondary-container */
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .glass-header {
+            background: linear-gradient(135deg, #001f3f 0%, #000613 100%);
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 20px rgba(0, 31, 63, 0.08);
+        }
+        .switch-input:checked + .switch-label {
+            background-color: #735c00;
+        }
+        .switch-input:checked + .switch-label::after {
+            transform: translateX(100%);
+            background-color: #fed65b;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-primary-container dark:bg-primary flex flex-col py-lg shadow-lg z-50">
+<div class="px-gutter mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-on-primary uppercase tracking-tight">LigaPro Ecuador</h1>
+<p class="font-label-bold text-label-bold text-on-primary-container opacity-80">Management Portal</p>
+</div>
+<nav class="flex-1 px-sm space-y-base">
+<a class="flex items-center gap-sm px-md py-sm transition-transform active:scale-95 text-on-primary-container hover:text-on-primary hover:bg-primary-fixed-dim/10 rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold text-label-bold">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm transition-transform active:scale-95 text-on-primary-container hover:text-on-primary hover:bg-primary-fixed-dim/10 rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-bold text-label-bold">Match Center</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm transition-transform active:scale-95 text-on-primary-container hover:text-on-primary hover:bg-primary-fixed-dim/10 rounded-lg" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-label-bold text-label-bold">Disciplinary</span>
+</a>
+<!-- Active State: User Management maps to Profile intent -->
+<a class="flex items-center gap-sm px-md py-sm transition-transform active:scale-95 bg-secondary-container text-on-secondary-container rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-bold text-label-bold">User Management</span>
+</a>
+</nav>
+<div class="px-sm space-y-base border-t border-outline-variant/20 pt-lg">
+<button class="w-full mb-md bg-secondary text-on-secondary py-sm font-label-bold text-label-bold rounded-lg hover:brightness-110 transition-all uppercase">
+                New Match Report
+            </button>
+<a class="flex items-center gap-sm px-md py-sm text-on-primary-container hover:text-on-primary" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-bold text-label-bold">Help Center</span>
+</a>
+<a class="flex items-center gap-sm px-md py-sm text-on-primary-container hover:text-on-primary" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-bold text-label-bold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[280px] min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-surface border-b border-outline-variant flex justify-between items-center w-full px-gutter h-16">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md text-primary uppercase">Perfil de Usuario</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-high p-base rounded-full transition-colors">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-high p-base rounded-full transition-colors">settings</span>
+<div class="h-8 w-px bg-outline-variant mx-xs"></div>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of an executive male administrator for a high-end sports organization, set against a blurred modern office background with subtle blue and gold accents. The lighting is crisp and cinematic, emphasizing authority and professional calm. He wears a tailored navy blazer and a crisp white shirt, fitting the LigaPro corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3qUSjX-7tn2PiduMtZFSJRFsDxFoW4OSqkH3rEQy8yx7PTdNpOy8rzWDu0Z_il0ciRN2t7oN7KaAhuUIq54sCH_jUPXJsQkUlbVrBUsVGIaBRX3IlMAv2Fb02LpNjRJJ8VaQgXJ3lgpw-vzemy0LQlRKQ_N1u2uTexqPmjIjma-Vh04N4t2twt1fSIySL2V4kXyMZ3bAJ-eU-TdcFo-tqHXhqe99S-dlw3wMrj9iktPmkfH4njTOTUA"/>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface">Admin Portal</span>
+</div>
+</div>
+</header>
+<!-- Profile Content -->
+<div class="p-gutter max-w-container-max mx-auto">
+<!-- Hero Section -->
+<div class="glass-header rounded-xl p-lg text-on-primary mb-lg flex flex-col md:flex-row items-center gap-lg relative overflow-hidden">
+<div class="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-1/4 -translate-y-1/4">
+<span class="material-symbols-outlined text-[300px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div class="relative group">
+<div class="w-32 h-32 rounded-full border-4 border-secondary-container shadow-xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High-resolution professional headshot of a middle-aged sports executive with a confident smile, wearing professional business attire. The backdrop is a clean, minimalist architectural space with soft daylight and hints of corporate navy blue. The image represents the prestige and leadership of the Ecuadorian LigaPro management team." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvBs3zYPZ1Q3RJQ8tr2ddSx3hgctPxj5ZX1dhE2ZG577BPr5gsVWuOwY1q_kodx3BZ-pBeQgfBJCFPfx2UI7hhhLqSDtLTLHCHKujYq_-Ub8laX8Kd1j9LqHfy2O3JS5OrdiQ3QajF0WOv5BBvIMh7n3vRoJ9OWC3ta4ZUhum8wPeU19vXE8v54AV0jeh471Qyc0CdnHHswJcrSnNpgUY6_dlY8dNQkQkUSzikP_YNn1YiSstUiOC3cg"/>
+</div>
+<button class="absolute bottom-0 right-0 bg-secondary text-on-secondary p-xs rounded-full shadow-lg hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-base">edit</span>
+</button>
+</div>
+<div class="text-center md:text-left z-10">
+<h2 class="font-display-lg text-headline-lg mb-xs">Ing. Roberto Méndez</h2>
+<p class="font-headline-md text-headline-md text-secondary-container mb-xs">Director de Competiciones</p>
+<div class="flex flex-wrap justify-center md:justify-start gap-sm items-center opacity-90">
+<span class="flex items-center gap-xs font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">apartment</span> Dirección de Operaciones
+                        </span>
+<span class="w-1 h-1 bg-secondary-container rounded-full hidden md:block"></span>
+<span class="flex items-center gap-xs font-label-bold text-label-bold">
+<span class="material-symbols-outlined text-sm">verified_user</span> Administrator Level 4
+                        </span>
+</div>
+</div>
+<div class="md:ml-auto flex flex-col items-center md:items-end gap-sm z-10">
+<button class="bg-secondary text-on-secondary px-lg py-sm font-label-bold text-label-bold rounded-lg shadow-md hover:brightness-110 transition-all uppercase flex items-center gap-sm">
+<span class="material-symbols-outlined">save</span> Guardar Cambios
+                    </button>
+<span class="text-on-primary-container text-[12px] uppercase tracking-widest font-bold">Última conexión: Hace 12 min</span>
+</div>
+</div>
+<!-- Two Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column -->
+<div class="lg:col-span-5 space-y-gutter">
+<!-- Información Personal -->
+<section class="bg-surface-container-lowest rounded-xl card-shadow p-lg border border-outline-variant">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">badge</span>
+<h3 class="font-headline-md text-headline-md uppercase text-primary">Información Personal</h3>
+</div>
+<div class="space-y-md">
+<div>
+<label class="font-label-bold text-label-bold text-on-surface-variant block mb-xs">Correo Electrónico</label>
+<input class="w-full bg-surface border border-outline-variant rounded px-md py-sm font-body-md focus:border-secondary-container focus:ring-0" type="email" value="r.mendez@ligapro.ec"/>
+</div>
+<div>
+<label class="font-label-bold text-label-bold text-on-surface-variant block mb-xs">Teléfono de Contacto</label>
+<input class="w-full bg-surface border border-outline-variant rounded px-md py-sm font-body-md focus:border-secondary-container focus:ring-0" type="text" value="+593 99 876 5432"/>
+</div>
+<div>
+<label class="font-label-bold text-label-bold text-on-surface-variant block mb-xs">ID de Empleado</label>
+<div class="bg-surface-container px-md py-sm rounded border border-outline-variant/30 text-on-surface-variant font-stats-number text-md">
+                                    LP-2024-0042
+                                </div>
+</div>
+</div>
+</section>
+<!-- Seguridad y Acceso -->
+<section class="bg-surface-container-lowest rounded-xl card-shadow p-lg border border-outline-variant">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+<h3 class="font-headline-md text-headline-md uppercase text-primary">Seguridad y Acceso</h3>
+</div>
+<div class="space-y-md">
+<div class="flex justify-between items-center p-md bg-surface-container-low rounded-lg border border-outline-variant/20">
+<div>
+<p class="font-label-bold text-label-bold text-primary">Contraseña de Usuario</p>
+<p class="text-[12px] text-on-surface-variant">Actualizada hace 45 días</p>
+</div>
+<button class="text-secondary font-label-bold text-label-bold hover:underline transition-all">Cambiar Password</button>
+</div>
+<div class="flex justify-between items-center p-md bg-surface-container-low rounded-lg border border-outline-variant/20">
+<div>
+<p class="font-label-bold text-label-bold text-primary">Autenticación (2FA)</p>
+<div class="flex items-center gap-xs mt-xs">
+<span class="w-2 h-2 bg-success-green rounded-full bg-[#16a34a]"></span>
+<span class="text-[12px] font-bold text-[#16a34a] uppercase">Activo</span>
+</div>
+</div>
+<button class="bg-outline-variant/20 text-on-surface-variant px-md py-xs rounded font-label-bold text-label-bold hover:bg-outline-variant/30 transition-colors">Gestionar</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column -->
+<div class="lg:col-span-7 space-y-gutter">
+<!-- Preferencias de Notificación -->
+<section class="bg-surface-container-lowest rounded-xl card-shadow p-lg border border-outline-variant">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+<h3 class="font-headline-md text-headline-md uppercase text-primary">Preferencias de Notificación</h3>
+</div>
+<div class="space-y-sm">
+<div class="flex items-center justify-between py-sm border-b border-outline-variant/10">
+<span class="font-body-md text-on-surface">Alertas Críticas de Programación</span>
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in">
+<input checked="" class="switch-input absolute w-0 h-0 opacity-0" id="toggle1" type="checkbox"/>
+<label class="switch-label absolute block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-all w-full" for="toggle1"></label>
+</div>
+</div>
+<div class="flex items-center justify-between py-sm border-b border-outline-variant/10">
+<span class="font-body-md text-on-surface">Conflictos Fecha FIFA</span>
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in">
+<input checked="" class="switch-input absolute w-0 h-0 opacity-0" id="toggle2" type="checkbox"/>
+<label class="switch-label absolute block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-all w-full" for="toggle2"></label>
+</div>
+</div>
+<div class="flex items-center justify-between py-sm">
+<span class="font-body-md text-on-surface">Informes de Escenarios</span>
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in">
+<input class="switch-input absolute w-0 h-0 opacity-0" id="toggle3" type="checkbox"/>
+<label class="switch-label absolute block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:w-4 after:h-4 after:rounded-full after:transition-all w-full" for="toggle3"></label>
+</div>
+</div>
+</div>
+</section>
+<!-- Registro de Actividad Reciente -->
+<section class="bg-surface-container-lowest rounded-xl card-shadow p-lg border border-outline-variant">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">history</span>
+<h3 class="font-headline-md text-headline-md uppercase text-primary">Registro de Actividad Reciente</h3>
+</div>
+<div class="relative">
+<div class="absolute left-[15px] top-0 bottom-0 w-[2px] bg-outline-variant/30"></div>
+<div class="space-y-lg relative">
+<!-- Activity Item 1 -->
+<div class="flex gap-lg">
+<div class="relative z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-4 border-surface-container-lowest shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[14px]">calendar_today</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-primary">Programó LDU vs IDV</p>
+<p class="text-[12px] text-on-surface-variant font-bold uppercase tracking-tighter">Hoy, 10:45 AM • Fecha 12 - Etapa 2</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-lg">
+<div class="relative z-10 w-8 h-8 rounded-full bg-error flex items-center justify-center border-4 border-surface-container-lowest shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[14px]">gavel</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-primary">Actualizó sanción de K. Páez</p>
+<p class="text-[12px] text-on-surface-variant font-bold uppercase tracking-tighter">Ayer, 4:20 PM • Expediente #334-DP</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-lg">
+<div class="relative z-10 w-8 h-8 rounded-full bg-secondary flex items-center justify-center border-4 border-surface-container-lowest shrink-0">
+<span class="material-symbols-outlined text-on-secondary text-[14px]">edit_document</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-primary">Revisión de Informe: Estadio Modelo</p>
+<p class="text-[12px] text-on-surface-variant font-bold uppercase tracking-tighter">15 Oct, 2024 • Delegado de Seguridad</p>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex gap-lg">
+<div class="relative z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center border-4 border-surface-container-lowest shrink-0">
+<span class="material-symbols-outlined text-on-primary text-[14px]">check_circle</span>
+</div>
+<div>
+<p class="font-label-bold text-label-bold text-primary">Validación de nómina arbitral</p>
+<p class="text-[12px] text-on-surface-variant font-bold uppercase tracking-tighter">14 Oct, 2024 • CNA Ecuador</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-lg text-primary-container font-label-bold text-label-bold hover:bg-surface-container-high py-sm rounded transition-colors uppercase border-t border-outline-variant/20">
+                            Ver todo el historial
+                        </button>
+</section>
+</div>
+</div>
+<!-- Footer / System Info -->
+<footer class="mt-xl py-lg border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-md opacity-60">
+<p class="font-label-bold text-[12px] uppercase">LigaPro Ecuador © 2024 • Portal Administrativo V2.4.1</p>
+<div class="flex gap-md">
+<a class="font-label-bold text-[12px] hover:text-primary underline" href="#">Política de Privacidad</a>
+<a class="font-label-bold text-[12px] hover:text-primary underline" href="#">Soporte Técnico</a>
+</div>
+</footer>
+</div>
+</main>
+<script>
+        // Simple toggle state management
+        document.querySelectorAll('.switch-input').forEach(input => {
+            input.addEventListener('change', function() {
+                console.log(`Notification ${this.id} changed to: ${this.checked}`);
+            });
+        });
+
+        // Hover kinetic effect for cards
+        document.querySelectorAll('section').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'all 0.3s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

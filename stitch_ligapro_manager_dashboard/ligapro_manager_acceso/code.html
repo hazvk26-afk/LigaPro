@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LigaPro Manager - Selección de Rol</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Barlow+Condensed:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f4f5",
+                        "surface-tint": "#476083",
+                        "on-background": "#191c1d",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#afc8f0",
+                        "on-secondary-container": "#745c00",
+                        "inverse-primary": "#afc8f0",
+                        "on-secondary-fixed": "#241a00",
+                        "on-primary-container": "#6f88ad",
+                        "surface": "#f8f9fa",
+                        "on-surface-variant": "#43474e",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-fixed": "#ffe088",
+                        "tertiary-container": "#470001",
+                        "surface-dim": "#d9dadb",
+                        "tertiary-fixed": "#ffdad5",
+                        "secondary-container": "#fed65b",
+                        "on-tertiary-fixed": "#410001",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#e9c349",
+                        "inverse-surface": "#2e3132",
+                        "surface-container": "#edeeef",
+                        "on-surface": "#191c1d",
+                        "background": "#f8f9fa",
+                        "outline-variant": "#c4c6cf",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb4aa",
+                        "secondary": "#735c00",
+                        "primary": "#000613",
+                        "tertiary": "#160000",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#fa3d33",
+                        "surface-variant": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "primary-fixed": "#d4e3ff",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#74777f",
+                        "on-primary-fixed": "#001c3a",
+                        "on-primary-fixed-variant": "#2f486a",
+                        "on-tertiary-fixed-variant": "#930007",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#001f3f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "container-max": "1440px",
+                        "lg": "48px",
+                        "xl": "80px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Barlow Condensed"],
+                        "label-bold": ["Barlow Condensed"],
+                        "body-lg": ["Barlow Condensed"],
+                        "headline-lg": ["Montserrat"],
+                        "stats-number": ["Montserrat"],
+                        "headline-md": ["Montserrat"],
+                        "display-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-bold": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "stats-number": ["24px", {"lineHeight": "24px", "fontWeight": "800"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .stadium-overlay {
+            background-blend-mode: overlay;
+            background-color: rgba(0, 6, 19, 0.85);
+        }
+        .kinetic-bg {
+            background: radial-gradient(circle at center, #001f3f 0%, #000613 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gold-shimmer {
+            background: linear-gradient(135deg, #ffe088 0%, #735c00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-primary min-h-screen flex items-center justify-center overflow-hidden font-body-md text-on-primary">
+<!-- Subtle Stadium Texture Background -->
+<div class="fixed inset-0 z-0 stadium-overlay kinetic-bg" data-alt="A cinematic, wide-angle low-angle shot of a modern professional football stadium at twilight. The architecture is sleek with sharp angles and powerful floodlights creating a high-performance atmosphere. The color palette is dominated by deep navy blue shadows and atmospheric golden lighting reflecting off the pitch. The scene is rendered in a high-fidelity broadcast style with professional camera depth of field." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCY3qhgcdiKaffTfJrpEJB0Aq-fG1r3VFWSDmb-KjkQt8tKAgjU853F7Da7-6jpccSx5DFHBbzc44WpmKy9PovlbQ6FlSmUCV1mHx6JurSdna27R2zPWhA9EoXLv9hLZd577h1wKoS9Zm0Z5kFCYYOWQiyEHoV5jZc2IS_kT-njrm5gbYfhAHsNbUJFTrupkavvAVAukEkn4Vy8FtUGf3xZV8IXrNQ5Gpbdr-OrnnFPvoaOEfsfBg6zWA')">
+</div>
+<!-- Main Content Container -->
+<main class="relative z-10 w-full max-w-container-max px-md flex flex-col items-center justify-center min-h-screen">
+<!-- Logo Section -->
+<div class="mb-lg animate-fade-in text-center">
+<div class="relative group">
+<div class="absolute -inset-4 bg-secondary-container/10 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="relative flex items-center justify-center flex-col">
+<span class="font-headline-lg text-[64px] leading-tight text-on-primary tracking-tighter uppercase font-extrabold italic">
+                        LigaPro
+                    </span>
+<span class="font-label-bold text-secondary tracking-[0.3em] uppercase -mt-2">
+                        Ecuador
+                    </span>
+</div>
+</div>
+</div>
+<!-- Welcome Message -->
+<div class="text-center mb-xl max-w-2xl">
+<h1 class="font-headline-lg text-on-primary mb-sm leading-tight">
+                Bienvenido a la gestión oficial del fútbol ecuatoriano
+            </h1>
+<p class="font-body-lg text-on-primary/60 max-w-lg mx-auto">
+                Seleccione su perfil de acceso para continuar a la plataforma integrada de administración y noticias.
+            </p>
+</div>
+<!-- Role Selection Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full max-w-4xl px-md">
+<!-- Perfil Hincha Card -->
+<button class="group relative glass-card p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[320px]" onclick="console.log('Fan Role Selected')">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all"></div>
+<div>
+<div class="mb-md">
+<span class="material-symbols-outlined text-[48px] text-secondary group-hover:scale-110 transition-transform inline-block">
+                            sports_soccer
+                        </span>
+</div>
+<h2 class="font-headline-md text-on-primary mb-xs">Perfil Hincha</h2>
+<p class="font-body-md text-on-primary/70">
+                        Acceso público a noticias de última hora, resultados en tiempo real y estadísticas oficiales de la liga.
+                    </p>
+</div>
+<div class="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
+<span class="font-label-bold text-secondary uppercase">Explorar Ahora</span>
+<span class="material-symbols-outlined text-secondary text-sm">arrow_forward</span>
+</div>
+</button>
+<!-- Acceso Administrativo Card -->
+<button class="group relative glass-card p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[320px] border-secondary/20" onclick="showLogin()">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-container/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-secondary-container/20 transition-all"></div>
+<div>
+<div class="mb-md">
+<span class="material-symbols-outlined text-[48px] text-secondary-container group-hover:scale-110 transition-transform inline-block" style="font-variation-settings: 'FILL' 1;">
+                            admin_panel_settings
+                        </span>
+</div>
+<h2 class="font-headline-md text-on-primary mb-xs">Acceso Administrativo</h2>
+<p class="font-body-md text-on-primary/70">
+                        Portal seguro para clubes, árbitros y personal de la LigaPro. Gestión de actas, disciplina y calendarios.
+                    </p>
+</div>
+<div class="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
+<span class="font-label-bold text-secondary-container uppercase">Iniciar Sesión</span>
+<span class="material-symbols-outlined text-secondary-container text-sm">lock</span>
+</div>
+</button>
+</div>
+<!-- Footer / Support -->
+<footer class="mt-xl flex flex-col items-center gap-sm opacity-50 hover:opacity-100 transition-opacity">
+<p class="font-label-bold text-[12px] uppercase tracking-widest">Powered by LigaPro Systems v4.0</p>
+<div class="flex gap-md">
+<a class="font-label-bold text-xs hover:text-secondary transition-colors" href="#">Soporte Técnico</a>
+<a class="font-label-bold text-xs hover:text-secondary transition-colors" href="#">Términos de Uso</a>
+</div>
+</footer>
+</main>
+<!-- Overlay Login Modal (Hidden by default) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-md bg-primary/90 backdrop-blur-md hidden transition-all duration-500 opacity-0 translate-y-4" id="loginModal">
+<div class="glass-card w-full max-w-md p-xl rounded-xl relative shadow-2xl">
+<button class="absolute top-md right-md text-on-primary/50 hover:text-on-primary" onclick="hideLogin()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="text-center mb-lg">
+<span class="material-symbols-outlined text-secondary-container text-[48px] mb-base">shield_person</span>
+<h3 class="font-headline-md text-on-primary">Ingreso Seguro</h3>
+<p class="font-body-md text-on-primary/60">Credenciales corporativas de LigaPro</p>
+</div>
+<form class="space-y-md" onsubmit="event.preventDefault();">
+<div class="space-y-xs">
+<label class="font-label-bold text-xs uppercase text-on-primary/50 block ml-1">Usuario</label>
+<input class="w-full bg-white/5 border border-white/10 rounded-lg p-md text-on-primary focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition-all" placeholder="ID de Empleado o Club" type="text"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-bold text-xs uppercase text-on-primary/50 block ml-1">Contraseña</label>
+<input class="w-full bg-white/5 border border-white/10 rounded-lg p-md text-on-primary focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition-all" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center justify-between py-sm">
+<label class="flex items-center gap-base cursor-pointer group">
+<input class="form-checkbox bg-transparent border-white/20 rounded text-secondary-container focus:ring-0" type="checkbox"/>
+<span class="font-label-bold text-xs text-on-primary/60 group-hover:text-on-primary transition-colors">Recordarme</span>
+</label>
+<a class="font-label-bold text-xs text-secondary-container hover:underline" href="#">¿Olvidó su contraseña?</a>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container font-headline-md py-md rounded-lg hover:bg-secondary transition-all active:scale-[0.98] shadow-lg shadow-secondary-container/10">
+                    ACCEDER AL PANEL
+                </button>
+</form>
+<div class="mt-lg pt-md border-t border-white/5 text-center">
+<p class="font-body-md text-on-primary/40 text-xs italic">
+                    Este sistema está monitoreado. El acceso no autorizado está prohibido por la normativa de seguridad de la LigaPro Ecuador.
+                </p>
+</div>
+</div>
+</div>
+<script>
+        function showLogin() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('hidden');
+            // Force reflow
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0', 'translate-y-4');
+            modal.classList.add('opacity-100', 'translate-y-0');
+        }
+
+        function hideLogin() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('opacity-0', 'translate-y-4');
+            modal.classList.remove('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500);
+        }
+
+        // Lightweight interaction for background depth
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.stadium-overlay').style.transform = `scale(1.05) translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+</body></html>

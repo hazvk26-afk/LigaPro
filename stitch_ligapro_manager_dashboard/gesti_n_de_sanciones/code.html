@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LigaPro Ecuador | Panel Disciplinario</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Barlow+Condensed:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100..900&family=Montserrat:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-low": "#f3f4f5",
+                "surface-tint": "#476083",
+                "on-background": "#191c1d",
+                "on-error": "#ffffff",
+                "primary-fixed-dim": "#afc8f0",
+                "on-secondary-container": "#745c00",
+                "inverse-primary": "#afc8f0",
+                "on-secondary-fixed": "#241a00",
+                "on-primary-container": "#6f88ad",
+                "surface": "#f8f9fa",
+                "on-surface-variant": "#43474e",
+                "on-secondary-fixed-variant": "#574500",
+                "surface-container-high": "#e7e8e9",
+                "secondary-fixed": "#ffe088",
+                "tertiary-container": "#470001",
+                "surface-dim": "#d9dadb",
+                "tertiary-fixed": "#ffdad5",
+                "secondary-container": "#fed65b",
+                "on-tertiary-fixed": "#410001",
+                "error": "#ba1a1a",
+                "secondary-fixed-dim": "#e9c349",
+                "inverse-surface": "#2e3132",
+                "surface-container": "#edeeef",
+                "on-surface": "#191c1d",
+                "background": "#f8f9fa",
+                "outline-variant": "#c4c6cf",
+                "surface-container-lowest": "#ffffff",
+                "on-error-container": "#93000a",
+                "tertiary-fixed-dim": "#ffb4aa",
+                "secondary": "#735c00",
+                "primary": "#000613",
+                "tertiary": "#160000",
+                "on-secondary": "#ffffff",
+                "surface-container-highest": "#e1e3e4",
+                "on-tertiary-container": "#fa3d33",
+                "surface-variant": "#e1e3e4",
+                "surface-bright": "#f8f9fa",
+                "primary-fixed": "#d4e3ff",
+                "on-tertiary": "#ffffff",
+                "outline": "#74777f",
+                "on-primary-fixed": "#001c3a",
+                "on-primary-fixed-variant": "#2f486a",
+                "on-tertiary-fixed-variant": "#930007",
+                "on-primary": "#ffffff",
+                "inverse-on-surface": "#f0f1f2",
+                "error-container": "#ffdad6",
+                "primary-container": "#001f3f"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "md": "24px",
+                "gutter": "24px",
+                "sm": "12px",
+                "base": "8px",
+                "container-max": "1440px",
+                "lg": "48px",
+                "xl": "80px",
+                "xs": "4px"
+            },
+            "fontFamily": {
+                "body-md": ["Barlow Condensed"],
+                "label-bold": ["Barlow Condensed"],
+                "body-lg": ["Barlow Condensed"],
+                "headline-lg": ["Montserrat"],
+                "stats-number": ["Montserrat"],
+                "headline-md": ["Montserrat"],
+                "headline-lg-mobile": ["Montserrat"],
+                "display-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-bold": ["14px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "26px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "stats-number": ["24px", {"lineHeight": "24px", "fontWeight": "800"}],
+                "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .suspended-glow {
+            box-shadow: 0 0 15px rgba(186, 26, 26, 0.2);
+        }
+        .zone-indicator-red { border-left: 4px solid #ba1a1a; }
+        .zone-indicator-yellow { border-left: 4px solid #fed65b; }
+        
+        /* Custom scrollbar for data-heavy sections */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #001f3f; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- Top Navigation Anchor -->
+<header class="bg-primary docked full-width top-0 z-50 shadow-md border-b border-on-primary-fixed-variant flex justify-between items-center w-full px-md py-sm sticky">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-on-primary uppercase tracking-tighter">LigaPro Ecuador</span>
+</div>
+<div class="hidden md:flex items-center gap-6">
+<nav class="flex gap-4">
+<a class="text-on-primary opacity-80 hover:bg-primary-container transition-colors font-label-bold text-label-bold px-3 py-1" href="#">Home</a>
+<a class="text-on-primary opacity-80 hover:bg-primary-container transition-colors font-label-bold text-label-bold px-3 py-1" href="#">Fixture</a>
+<a class="text-on-primary opacity-80 hover:bg-primary-container transition-colors font-label-bold text-label-bold px-3 py-1" href="#">Tables</a>
+<a class="text-secondary-container font-bold font-label-bold text-label-bold px-3 py-1" href="#">Discipline</a>
+</nav>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-primary" data-icon="notifications">notifications</span>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a sports league administrator in a dark business suit, high-contrast studio lighting with a neutral gray background, representing a high-authority corporate persona in the context of Ecuadorian football league management." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKfuyRI5zcAPi-9sBoStSBpG1qrirOw_McCpTbdTuMImN5JP5UR5TFehrxj7p8H_xbCPGelXch4cb71SlNti8m_CXdRMObc36_rZ4kBG88aoMNXP1oyjRIj8lnQt4KEGeEeCRgEIwZq25tlHed483gz2UL_LHF0TSFEawUIxbpRkuAr_aHyLd5N8CoUTDhI2daCNpC9GPpIg6N0pwiswn0gxLJO1-NfZ0BAV3pR3j4M7BwVi4mCohiFQ"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex">
+<!-- Sidebar Navigation Anchor (Admin Console) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-[280px] fixed left-0 top-16 bg-primary border-r border-on-primary-fixed-variant shadow-xl py-lg z-40 overflow-y-auto">
+<div class="px-md mb-lg">
+<h3 class="font-headline-lg text-headline-lg text-secondary-fixed">Admin Console</h3>
+<p class="text-on-primary opacity-70 font-body-md text-body-md">LigaPro Ecuador</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-primary-container px-md py-sm transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Dashboard
+                </a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-primary-container px-md py-sm transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span> Scheduling
+                </a>
+<a class="bg-secondary-container text-on-secondary-container rounded-r-full mr-4 font-bold px-md py-sm flex items-center gap-3 scale-[0.99] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span> Discipline
+                </a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-primary-container px-md py-sm transition-all flex items-center gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+                </a>
+</nav>
+<div class="mt-auto px-md pt-lg border-t border-on-primary/10">
+<button class="w-full bg-error text-on-error font-label-bold text-label-bold py-sm rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="logout">logout</span> CERRAR SESIÓN
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] p-md lg:p-lg">
+<!-- Header & Action Row -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-md mb-lg">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary uppercase tracking-tight">Panel Disciplinario</h1>
+<p class="font-body-lg text-body-lg text-outline">Gestión centralizada de sanciones e incidencias de LigaPro.</p>
+</div>
+<button class="bg-primary text-on-primary font-label-bold text-label-bold px-md py-3 rounded-lg flex items-center gap-2 shadow-md hover:bg-primary-container transition-colors uppercase tracking-widest">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span> Cargar Incidencia
+                </button>
+</div>
+<!-- Dashboard Stats/Filters -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md mb-lg">
+<div class="md:col-span-8 bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(0,31,63,0.08)] border border-outline-variant flex flex-col md:flex-row items-center gap-4">
+<div class="relative flex-1 w-full">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 border-outline-variant rounded-lg font-body-md focus:ring-secondary focus:border-secondary" placeholder="Buscar jugador, club o ID..." type="text"/>
+</div>
+<div class="flex items-center gap-2 w-full md:w-auto">
+<select class="border-outline-variant rounded-lg font-label-bold text-label-bold py-2 px-4 focus:ring-secondary">
+<option>Serie A</option>
+<option>Serie B</option>
+</select>
+<button class="bg-surface-container-high text-on-surface-variant font-label-bold text-label-bold py-2 px-4 rounded-lg flex items-center gap-2 hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="filter_list">filter_list</span> Filtrar
+                        </button>
+</div>
+</div>
+<div class="md:col-span-4 grid grid-cols-2 gap-md">
+<div class="bg-primary-container text-on-primary-container p-md rounded-xl border border-on-primary-fixed-variant flex flex-col justify-center">
+<span class="font-label-bold text-label-bold uppercase opacity-70">Total Suspendidos</span>
+<span class="font-stats-number text-stats-number text-secondary-container">12</span>
+</div>
+<div class="bg-error-container text-on-error-container p-md rounded-xl border border-error/20 flex flex-col justify-center">
+<span class="font-label-bold text-label-bold uppercase opacity-70">Multas del Mes</span>
+<span class="font-stats-number text-stats-number">$4,250</span>
+</div>
+</div>
+</div>
+<!-- Main Tables Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Suspension Table (Main Content) -->
+<div class="lg:col-span-2 space-y-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span> Sanciones Activas
+                        </h2>
+<span class="bg-surface-variant px-3 py-1 rounded-full font-label-bold text-label-bold text-on-surface-variant">42 Registros</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(0,31,63,0.08)] border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead class="bg-primary text-on-primary font-label-bold text-label-bold uppercase tracking-wider">
+<tr>
+<th class="px-md py-4">Jugador / Equipo</th>
+<th class="px-md py-4">Sanción</th>
+<th class="px-md py-4">Restan</th>
+<th class="px-md py-4">Multa</th>
+<th class="px-md py-4 text-right">Estado</th>
+</tr>
+</thead>
+<tbody class="font-body-md divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-md py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary shadow-sm border border-outline-variant overflow-hidden">
+<img class="w-8 h-8 object-contain" data-alt="A small detailed club crest of a professional Ecuadorian football team, featuring navy blue and yellow colors, minimalist vector style on a clean white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQ5Sw9fJt763rUC8-uu8CymNVsIMw1iDUqMbKexva69Xdg9cAxJrt7WIg-iYYMGV-Y2TjDvXY8xEPMGCHeeLmEZERAXBTUDrpHtG_8twdR7bb8iHl7fAsS37REi_kXP7SZvJUX0jgPPLPlZfFIDtwkTAN4Ng6RL1EijAkUbaPf211TynfaTFs8k9_7asUGjkWWwisJp2sv_DSLTWJ9zCccNDm3QLnHU7msCeDiurO8_Yqf5mPLEMZldQ"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">C. Rodríguez</div>
+<div class="text-xs text-outline font-label-bold">Barcelona SC</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="text-error font-bold">Roja Directa</span>
+<div class="text-[10px] text-outline">Agresión física</div>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1">
+<span class="font-stats-number text-stats-number text-primary">02</span>
+<span class="text-xs uppercase text-outline">Fechas</span>
+</div>
+</td>
+<td class="px-md py-4 font-bold text-on-surface">$1,200.00</td>
+<td class="px-md py-4 text-right">
+<span class="bg-error text-on-error px-3 py-1 rounded-full text-[10px] font-bold uppercase suspended-glow">Suspendido</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors bg-surface-container-lowest">
+<td class="px-md py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary shadow-sm border border-outline-variant overflow-hidden">
+<img class="w-8 h-8 object-contain" data-alt="A professional football club crest from Quito, Ecuador, featuring a deep navy and white aesthetic, circular emblem with classic typography, elegant athletic design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnOi_Jse2mGLdo8TOZrz5VyoAw0unHJIYxI1D3FFPLnViQ8OY0tBZ9zzjMzf1PurF70FM8aagktlCy9fqqqBnjlRdT1srtT4glHwtFTlPTeGO_5m-Q2JfLl5SYk1idsjK8H1FjoG62RkaISnheet-c53ssEq6_mc5D4Bw2JoGfPqy8SKCPFMXt_EslQrFGL5cLngSEv2UHPr1Foq-69-pQuUIVqCQqkafE6qRUS_cYndTEU3PjMfaZqQ"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">J. Sornoza</div>
+<div class="text-xs text-outline font-label-bold">IDV</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="text-primary font-bold">Acumulación</span>
+<div class="text-[10px] text-outline">5ta Amarilla</div>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1">
+<span class="font-stats-number text-stats-number text-primary">01</span>
+<span class="text-xs uppercase text-outline">Fechas</span>
+</div>
+</td>
+<td class="px-md py-4 font-bold text-on-surface">$400.00</td>
+<td class="px-md py-4 text-right">
+<span class="bg-error text-on-error px-3 py-1 rounded-full text-[10px] font-bold uppercase suspended-glow">Suspendido</span>
+</td>
+</tr>
+<!-- Row 3 - Active Case -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-md py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary shadow-sm border border-outline-variant overflow-hidden">
+<img class="w-8 h-8 object-contain" data-alt="Official club logo for a football team from Guayaquil, Ecuador, featuring bright yellow and black stripes, athletic crest shield shape, dynamic and prestigious feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA52h8tCHu2_zdB5mVQccyI2GX4dCfLEM2XBUn0KfqJZfZjF_o--HY1KDn3bouuvBSTm3egJw79I_Z4Ke4pZAzfGlLG384BVBORDhtfFN-srBanmd8L3IGlwdsjc9A6a3cjUZOBOAO6YQXvaBGSQjawSc6ctmirnTeKmizTqzpBLY_wpS1IWUVTm8RhKJCbnCIDXo9NuMlJQHRxTwjqWqhUc6BxzUBEic6og-L85hVPs_kJdok1piU6qw"/>
+</div>
+<div>
+<div class="font-bold text-on-surface">L. Quiñónez</div>
+<div class="text-xs text-outline font-label-bold">Emelec</div>
+</div>
+</td>
+<td class="px-md py-4">
+<span class="text-on-surface-variant font-bold">Multa Administrativa</span>
+<div class="text-[10px] text-outline">Conducta impropia</div>
+</td>
+<td class="px-md py-4">
+<div class="flex items-center gap-1">
+<span class="font-stats-number text-stats-number text-outline">00</span>
+<span class="text-xs uppercase text-outline">Fechas</span>
+</div>
+</td>
+<td class="px-md py-4 font-bold text-on-surface">$800.00</td>
+<td class="px-md py-4 text-right">
+<span class="border border-secondary text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-secondary-container/10">Habilitado</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-surface-container-high p-4 flex justify-between items-center">
+<p class="text-xs font-label-bold text-outline uppercase">Mostrando 3 de 42 casos</p>
+<div class="flex gap-2">
+<button class="p-1 rounded hover:bg-outline-variant transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-1 rounded hover:bg-outline-variant transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Gestíon de Tarjetas (Highlight section) -->
+<div class="lg:col-span-1 space-y-md">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="style">style</span> Gestión de Tarjetas
+                    </h2>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(0,31,63,0.08)] border border-outline-variant relative overflow-hidden">
+<!-- Background Glow Decoration -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-container/20 blur-3xl rounded-full"></div>
+<p class="font-label-bold text-label-bold text-secondary uppercase mb-4 tracking-widest">En riesgo (4 Amarillas)</p>
+<div class="space-y-4">
+<!-- Player Alert 1 -->
+<div class="zone-indicator-yellow bg-surface p-3 rounded-r-lg border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container text-secondary-container flex items-center justify-center font-bold text-xs">
+                                        LDU
+                                    </div>
+<div>
+<p class="font-bold text-on-surface">Alex Arce</p>
+<p class="text-[10px] font-label-bold text-outline uppercase">Próx: vs Aucas</p>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<div class="flex gap-0.5">
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-outline-variant rounded-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-secondary mt-1">4/5</span>
+</div>
+</div>
+<!-- Player Alert 2 -->
+<div class="zone-indicator-yellow bg-surface p-3 rounded-r-lg border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container text-secondary-container flex items-center justify-center font-bold text-xs">
+                                        MSC
+                                    </div>
+<div>
+<p class="font-bold text-on-surface">Jeison Medina</p>
+<p class="text-[10px] font-label-bold text-outline uppercase">Próx: vs Emelec</p>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<div class="flex gap-0.5">
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-outline-variant rounded-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-secondary mt-1">4/5</span>
+</div>
+</div>
+<!-- Player Alert 3 -->
+<div class="zone-indicator-yellow bg-surface p-3 rounded-r-lg border border-outline-variant flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container text-secondary-container flex items-center justify-center font-bold text-xs">
+                                        ELN
+                                    </div>
+<div>
+<p class="font-bold text-on-surface">Bryan Nazareno</p>
+<p class="text-[10px] font-label-bold text-outline uppercase">Próx: vs Católica</p>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<div class="flex gap-0.5">
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-secondary rounded-sm"></div>
+<div class="w-2 h-3 bg-outline-variant rounded-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-secondary mt-1">4/5</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 bg-secondary-container text-on-secondary-container font-label-bold text-label-bold py-2 rounded-lg hover:opacity-90 transition-all uppercase">Ver Reporte Completo</button>
+</div>
+<!-- Additional Context Card -->
+<div class="bg-primary text-on-primary p-md rounded-xl shadow-md flex items-center gap-4 group cursor-pointer hover:bg-primary-container transition-colors">
+<div class="p-3 bg-secondary-container text-on-secondary-container rounded-lg">
+<span class="material-symbols-outlined" data-icon="article">article</span>
+</div>
+<div>
+<p class="font-bold uppercase text-sm">Reglamento Disciplinario</p>
+<p class="text-xs opacity-70">Actualización 2024 - Congreso FEF</p>
+</div>
+<span class="material-symbols-outlined ml-auto group-hover:translate-x-1 transition-transform" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-sm pb-safe h-20 bg-surface border-t border-outline-variant shadow-[0px_-4px_20px_rgba(0,31,63,0.08)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-bold text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-bold text-[10px]">Fixture</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="format_list_numbered">format_list_numbered</span>
+<span class="font-label-bold text-[10px]">Tables</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary bg-secondary-container/20 rounded-full px-4 py-1 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-bold text-[10px]">Discipline</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // In a real app, this would open a side panel or detail view
+                console.log('Viewing sanction details...');
+            });
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-secondary/50');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-secondary/50');
+        });
+    </script>
+</body></html>
