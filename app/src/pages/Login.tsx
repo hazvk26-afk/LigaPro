@@ -26,14 +26,14 @@ export const Login: React.FC = () => {
     navigate('/');
   };
 
-  const handleAdminLoginSubmit = (e: React.FormEvent) => {
+  const handleAdminLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) {
       setError('Por favor, ingrese su usuario.');
       return;
     }
 
-    const success = loginAsAdmin(username.trim());
+    const success = await loginAsAdmin(username.trim());
     if (success) {
       navigate('/admin');
     } else {

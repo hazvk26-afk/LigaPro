@@ -11,18 +11,21 @@ export const HomeHincha: React.FC = () => {
   const [standings, setStandings] = useState<Standing[]>([]);
 
   useEffect(() => {
-    // Load dynamic data from DB
-    const allMatches = getMatches().filter(m => m.series_id === selectedSeries);
-    const allClubs = getClubs();
-    setMatches(allMatches);
-    setClubs(allClubs);
+    const fetchData = async () => {
+      const allMatches = await getMatches();
+      const filteredMatches = allMatches.filter(m => m.series_id === selectedSeries);
+      const allClubs = await getClubs();
+      setMatches(filteredMatches);
+      setClubs(allClubs);
 
-    // Get active phase for series to compute standings
-    const phase = getPhases().find((p) => p.series_id === selectedSeries && p.phase_order === 1);
-    if (phase) {
-      const computed = calculateStandings(selectedSeries, phase.id);
-      setStandings(computed.slice(0, 5)); // show top 5
-    }
+      const allPhases = await getPhases();
+      const phase = allPhases.find((p) => p.series_id === selectedSeries && p.phase_order === 1);
+      if (phase) {
+        const computed = await calculateStandings(selectedSeries, phase.id);
+        setStandings(computed.slice(0, 5)); // show top 5
+      }
+    };
+    fetchData();
   }, [selectedSeries]);
 
   const getClubDetails = (clubId: string) => {

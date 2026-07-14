@@ -6,7 +6,7 @@ interface AuthContextType {
   user: UserProfile | null;
   loading: boolean;
   loginAsHincha: (clubId?: string | null) => void;
-  loginAsAdmin: (username: string) => boolean;
+  loginAsAdmin: (username: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -38,9 +38,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveCurrentUser(defaultHincha);
   };
 
-  const loginAsAdmin = (username: string): boolean => {
+  const loginAsAdmin = async (username: string): Promise<boolean> => {
     // Check in database profiles for admin-like roles
-    const profiles = getProfiles();
+    const profiles = await getProfiles();
     const found = profiles.find(
       p => p.display_name.toLowerCase().includes(username.toLowerCase()) || 
            p.role === username.toLowerCase() || 

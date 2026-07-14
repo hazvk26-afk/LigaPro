@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMatches, saveMatches, getClubs, getStadiums, getOfficials, getPhases, getSeries, validateMatchSchedule, ScheduleValidationResult } from '../services/db';
+import { getMatches, upsertMatch, getClubs, getStadiums, getOfficials, getPhases, getSeries, validateMatchSchedule, ScheduleValidationResult } from '../services/db';
 import { Match, Club, Stadium, Official, Phase, Series } from '../types';
 
 export const ProgramacionPartido: React.FC = () => {
@@ -40,66 +40,84 @@ export const ProgramacionPartido: React.FC = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
-    const allClubs = getClubs();
-    setClubs(allClubs);
-    
-    const allStadiums = getStadiums();
-    setStadiums(allStadiums);
-    
-    setOfficials(getOfficials());
-    setPhases(getPhases());
-    setSeriesList(getSeries());
+    const loadAll = async () => {
+      const allClubs = await getClubs();
+      setClubs(allClubs);
+      
+      const allStadiums = await getStadiums();
+      setStadiums(allStadiums);
+      
+      const allOfficials = await getOfficials();
+      setOfficials(allOfficials);
+      
+      const allPhases = await getPhases();
+      setPhases(allPhases);
+      
+      const allSeries = await getSeries();
+      setSeriesList(allSeries);
 
-    // Defaults
-    if (allStadiums.length > 0) setStadiumId(allStadiums[0].id);
+      // Defaults
+      if (allStadiums.length > 0) setStadiumId(allStadiums[0].id);
 
-    // If Editing
-    if (id) {
-      const match = getMatches().find(m => m.id === id);
-      if (match) {
-        setSeriesId(match.series_id);
-        setPhaseId(match.phase_id);
-        setMatchday(match.matchday);
-        setHomeClubId(match.home_club_id);
-        setAwayClubId(match.away_club_id);
-        setUnifiedKickoff(match.unified_kickoff);
-        setStadiumId(match.stadium_id);
-        setRefereeId(match.referee_id || '');
-        setMatchCommissionerId(match.match_commissioner_id || '');
-        setSecurityDelegateId(match.security_delegate_id || '');
-        setVarOfficialId(match.var_official_id || '');
-        setStatus(match.status);
-        setHomeScore(match.home_score ?? '');
-        setAwayScore(match.away_score ?? '');
+      // If Editing
+      if (id) {
+        const allMatches = await getMatches();
+        const match = allMatches.find(m => m.id === id);
+        if (match) {
+          setSeriesId(match.series_id);
+          setPhaseId(match.phase_id);
+          setMatchday(match.matchday);
+          setHomeClubId(match.home_club_id);
+          setAwayClubId(match.away_club_id);
+          setUnifiedKickoff(match.unified_kickoff);
+          setStadiumId(match.stadium_id);
+          setRefereeId(match.referee_id || '');
+          setMatchCommissionerId(match.match_commissioner_id || '');
+          setSecurityDelegateId(match.security_delegate_id || '');
+          setVarOfficialId(match.var_official_id || '');
+          setStatus(match.status);
+          setHomeScore(match.home_score ?? '');
+          setAwayScore(match.away_score ?? '');
 
-        // Split scheduled_at
-        if (match.scheduled_at) {
-          const parts = match.scheduled_at.split('T');
-          setScheduledDate(parts[0]);
-          if (parts[1]) {
-            setScheduledTime(parts[1].substring(0, 5));
+          // Split scheduled_at
+          if (match.scheduled_at) {
+            const parts = match.scheduled_at.split('T');
+            setScheduledDate(parts[0]);
+            if (parts[1]) {
+              setScheduledTime(parts[1].substring(0, 5));
+            }
           }
         }
+      } else {
+        // Defaults for new match scheduling
+        const defaultSeries = 'series-a';
+        const seriesPhases = allPhases.filter(p => p.series_id === defaultSeries);
+        if (seriesPhases.length > 0) setPhaseId(seriesPhases[0].id);
+
+        const seriesClubs = allClubs.filter(c => c.series_id === defaultSeries);
+        if (seriesClubs.length >= 2) {
+          setHomeClubId(seriesClubs[0].id);
+          setAwayClubId(seriesClubs[1].id);
+        }
       }
-    }
+    };
+    loadAll();
   }, [id]);
 
-  // Sync phase selection with series choice
+  // Sync phase selection and default clubs with series selection for new match
   useEffect(() => {
-    const seriesPhases = getPhases().filter(p => p.series_id === seriesId);
-    if (seriesPhases.length > 0 && !id) {
-      setPhaseId(seriesPhases[0].id);
+    if (!id && phases.length > 0) {
+      const seriesPhases = phases.filter(p => p.series_id === seriesId);
+      if (seriesPhases.length > 0) {
+        setPhaseId(seriesPhases[0].id);
+      }
+      const seriesClubs = clubs.filter(c => c.series_id === seriesId);
+      if (seriesClubs.length >= 2) {
+        setHomeClubId(seriesClubs[0].id);
+        setAwayClubId(seriesClubs[1].id);
+      }
     }
-  }, [seriesId, id]);
-
-  // Sync default clubs when series/phase changes
-  useEffect(() => {
-    const seriesClubs = clubs.filter(c => c.series_id === seriesId);
-    if (seriesClubs.length >= 2 && !id) {
-      setHomeClubId(seriesClubs[0].id);
-      setAwayClubId(seriesClubs[1].id);
-    }
-  }, [seriesId, clubs, id]);
+  }, [seriesId, id, phases, clubs]);
 
   // Selected Stadium detail
   const selectedStadium = stadiums.find(s => s.id === stadiumId);
@@ -116,14 +134,14 @@ export const ProgramacionPartido: React.FC = () => {
   const handleValidation = (): ScheduleValidationResult => {
     const matchData: Partial<Match> = {
       scheduled_at: `${scheduledDate}T${scheduledTime}:00-05:00`,
-      notified_at: id ? undefined : new Date().toISOString(), // Today's date for new match notification
+      notified_at: id ? undefined : new Date().toISOString(),
     };
     const res = validateMatchSchedule(matchData, selectedStadium, selectedSeries, selectedPhase);
     setValidation(res);
     return res;
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setHasSubmitted(true);
 
@@ -148,7 +166,6 @@ export const ProgramacionPartido: React.FC = () => {
     }
 
     // Prepare Match Object
-    const allMatches = getMatches();
     const isoDatetime = `${scheduledDate}T${scheduledTime}:00-05:00`;
 
     const matchObject: Match = {
@@ -172,17 +189,12 @@ export const ProgramacionPartido: React.FC = () => {
       security_delegate_id: securityDelegateId || undefined
     };
 
-    if (id) {
-      const idx = allMatches.findIndex(m => m.id === id);
-      if (idx !== -1) {
-        allMatches[idx] = matchObject;
-      }
-    } else {
+    if (!id) {
       matchObject.notified_at = new Date().toISOString();
-      allMatches.push(matchObject);
     }
 
-    saveMatches(allMatches);
+    // import upsertMatch from db (it's already imported)
+    await upsertMatch(matchObject);
     navigate('/admin');
   };
 

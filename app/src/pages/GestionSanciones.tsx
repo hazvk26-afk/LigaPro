@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getSanctions, saveSanctions, getClubs, getPlayers, getMatches, getEvents, addMatchEvent } from '../services/db';
+import { getSanctions, insertSanction, getClubs, getPlayers, getMatches, getEvents } from '../services/db';
 import { DisciplinarySanction, Club, Player, Match } from '../types';
 
 export const GestionSanciones: React.FC = () => {
@@ -29,12 +29,12 @@ export const GestionSanciones: React.FC = () => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    const allSanctions = getSanctions();
-    const allClubs = getClubs();
-    const allPlayers = getPlayers();
-    const allMatches = getMatches();
-    const allEvents = getEvents();
+  const loadData = async () => {
+    const allSanctions = await getSanctions();
+    const allClubs = await getClubs();
+    const allPlayers = await getPlayers();
+    const allMatches = await getMatches();
+    const allEvents = await getEvents();
 
     setSanctions(allSanctions);
     setClubs(allClubs);
@@ -60,7 +60,7 @@ export const GestionSanciones: React.FC = () => {
     }).filter(Boolean) as { player: Player; club: Club; count: number }[];
 
     // Add some default mock cards for the tracker if empty, to ensure the UI looks premium
-    if (trackerList.length === 0) {
+    if (trackerList.length === 0 && allPlayers.length >= 4) {
       const defaultTracker = [
         { player: allPlayers[0], club: allClubs.find(c => c.id === allPlayers[0].club_id)!, count: 4 }, // LDU player near suspension
         { player: allPlayers[3], club: allClubs.find(c => c.id === allPlayers[3].club_id)!, count: 3 }  // IDV player near suspension
@@ -81,11 +81,10 @@ export const GestionSanciones: React.FC = () => {
     return p ? `${p.first_name} ${p.last_name}` : 'Desconocido';
   };
 
-  const handleAddSanction = (e: React.FormEvent) => {
+  const handleAddSanction = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formDesc.trim()) return;
 
-    const allSanctions = getSanctions();
     const newSanct: DisciplinarySanction = {
       id: Math.random().toString(36).substring(2, 11),
       player_id: formPlayerId || null,
@@ -98,8 +97,8 @@ export const GestionSanciones: React.FC = () => {
       created_at: new Date().toISOString()
     };
 
-    allSanctions.push(newEventCheckReincidencia(newSanct));
-    saveSanctions(allSanctions);
+    const finalSanct = newEventCheckReincidencia(newSanct);
+    await insertSanction(finalSanct);
     
     // Reset Form
     setFormDesc('');
@@ -109,7 +108,7 @@ export const GestionSanciones: React.FC = () => {
     setFormSuccess(true);
     setTimeout(() => setFormSuccess(false), 3000);
     
-    loadData(); // reload lists
+    await loadData(); // reload lists
   };
 
   // RN-24: Reincidencia fee calculator (Manual entry helper)

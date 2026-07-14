@@ -16,77 +16,85 @@ export const AdminDashboard: React.FC = () => {
   const [clubs, setClubs] = useState<Club[]>([]);
 
   useEffect(() => {
-    // 1. Core Counts
-    const allClubs = getClubs();
-    setClubs(allClubs);
-    setClubsCount(allClubs.length);
-    
-    const allSanctions = getSanctions();
-    setSanctionsCount(allSanctions.filter(s => s.status === 'active').length);
-    
-    setOfficialsCount(getOfficials().length);
-    setStadiumsCount(getStadiums().filter(s => s.is_qualified).length);
+    const fetchAdminData = async () => {
+      // 1. Core Counts
+      const allClubs = await getClubs();
+      setClubs(allClubs);
+      setClubsCount(allClubs.length);
+      
+      const allSanctions = await getSanctions();
+      setSanctionsCount(allSanctions.filter(s => s.status === 'active').length);
+      
+      const allOfficials = await getOfficials();
+      setOfficialsCount(allOfficials.length);
+      
+      const allStadiums = await getStadiums();
+      setStadiumsCount(allStadiums.filter(s => s.is_qualified).length);
 
-    // 2. Live Matches
-    const allMatches = getMatches();
-    setLiveMatches(allMatches.filter(m => m.status === 'live'));
+      // 2. Live Matches
+      const allMatches = await getMatches();
+      setLiveMatches(allMatches.filter(m => m.status === 'live'));
 
-    // 3. Standings (Top 5 Serie A)
-    const phase = getPhases().find((p) => p.series_id === 'series-a' && p.phase_order === 1);
-    if (phase) {
-      setStandings(calculateStandings('series-a', phase.id).slice(0, 5));
-    }
+      // 3. Standings (Top 5 Serie A)
+      const allPhases = await getPhases();
+      const phase = allPhases.find((p) => p.series_id === 'series-a' && p.phase_order === 1);
+      if (phase) {
+        const computed = await calculateStandings('series-a', phase.id);
+        setStandings(computed.slice(0, 5));
+      }
 
-    // 4. Critical Alerts Logic (Based on LIGAPRO regulations)
-    const alertsList: typeof criticalAlerts = [];
+      // 4. Critical Alerts Logic (Based on LIGAPRO regulations)
+      const alertsList: typeof criticalAlerts = [];
 
-    // Alert A: Matches without referee
-    const noRefMatches = allMatches.filter(m => m.status === 'scheduled' && !m.referee_id);
-    if (noRefMatches.length > 0) {
-      alertsList.push({
-        id: 'alert-no-refs',
-        title: `${noRefMatches.length} Partidos sin árbitros designados`,
-        desc: `Fase Uno | Límite de reglamento: designación 48 horas antes de la jornada.`,
-        type: 'error',
-        actionLabel: 'Asignar Árbitros',
-        path: `/admin/partidos/${noRefMatches[0].id}/editar` // Navigate to edit the first one
+      // Alert A: Matches without referee
+      const noRefMatches = allMatches.filter(m => m.status === 'scheduled' && !m.referee_id);
+      if (noRefMatches.length > 0) {
+        alertsList.push({
+          id: 'alert-no-refs',
+          title: `${noRefMatches.length} Partidos sin árbitros designados`,
+          desc: `Fase Uno | Límite de reglamento: designación 48 horas antes de la jornada.`,
+          type: 'error',
+          actionLabel: 'Asignar Árbitros',
+          path: `/admin/partidos/${noRefMatches[0].id}/editar`
+        });
+      }
+
+      // Alert B: Stadiums VAR requirements for Fase Dos
+      const noVarStadiums = allStadiums.filter(s => !s.var_infrastructure_ok);
+      if (noVarStadiums.length > 0) {
+        alertsList.push({
+          id: 'alert-no-var',
+          title: `${noVarStadiums.length} Estadios sin certificación VAR`,
+          desc: `La infraestructura VAR es obligatoria para todos los estadios en la Fase Dos de Serie A.`,
+          type: 'warning',
+          actionLabel: 'Revisar Estadios',
+          path: `/admin`
+        });
+      }
+
+      // Alert C: Rules violations warnings (15 days notice check - RN-14)
+      const ruleViolations = allMatches.filter(m => {
+        if (m.status !== 'scheduled' || !m.notified_at) return false;
+        const mDate = new Date(m.scheduled_at);
+        const nDate = new Date(m.notified_at);
+        const diff = (mDate.getTime() - nDate.getTime()) / (1000 * 3600 * 24);
+        return diff < 15;
       });
-    }
 
-    // Alert B: Stadiums VAR requirements for Fase Dos
-    const noVarStadiums = getStadiums().filter(s => !s.var_infrastructure_ok);
-    if (noVarStadiums.length > 0) {
-      alertsList.push({
-        id: 'alert-no-var',
-        title: `${noVarStadiums.length} Estadios sin certificación VAR`,
-        desc: `La infraestructura VAR es obligatoria para todos los estadios en la Fase Dos de Serie A.`,
-        type: 'warning',
-        actionLabel: 'Revisar Estadios',
-        path: `/admin` // Stand-in
-      });
-    }
+      if (ruleViolations.length > 0) {
+        alertsList.push({
+          id: 'alert-notif-notice',
+          title: `${ruleViolations.length} Programaciones fuera de ventana reglamentaria`,
+          desc: `Notificación enviada con menos de 15 días de anticipación (Art. 25).`,
+          type: 'warning',
+          actionLabel: 'Ajustar Calendario',
+          path: `/admin/partidos/${ruleViolations[0].id}/editar`
+        });
+      }
 
-    // Alert C: Rules violations warnings (15 days notice rule check - RN-14)
-    const ruleViolations = allMatches.filter(m => {
-      if (m.status !== 'scheduled' || !m.notified_at) return false;
-      const mDate = new Date(m.scheduled_at);
-      const nDate = new Date(m.notified_at);
-      const diff = (mDate.getTime() - nDate.getTime()) / (1000 * 3600 * 24);
-      return diff < 15;
-    });
-
-    if (ruleViolations.length > 0) {
-      alertsList.push({
-        id: 'alert-notif-notice',
-        title: `${ruleViolations.length} Programaciones fuera de ventana reglamentaria`,
-        desc: `Notificación enviada con menos de 15 días de anticipación (Art. 25).`,
-        type: 'warning',
-        actionLabel: 'Ajustar Calendario',
-        path: `/admin/partidos/${ruleViolations[0].id}/editar`
-      });
-    }
-
-    setCriticalAlerts(alertsList);
+      setCriticalAlerts(alertsList);
+    };
+    fetchAdminData();
   }, []);
 
   const getClub = (id: string) => clubs.find(c => c.id === id);

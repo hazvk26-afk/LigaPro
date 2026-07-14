@@ -10,26 +10,32 @@ export const TablaPosiciones: React.FC = () => {
   const [clubs, setClubs] = useState<Club[]>([]);
 
   useEffect(() => {
-    const allClubs = getClubs();
-    setClubs(allClubs);
+    const fetchClubs = async () => {
+      const allClubs = await getClubs();
+      setClubs(allClubs);
+    };
+    fetchClubs();
   }, []);
 
   useEffect(() => {
-    // Load phases for series
-    const allPhases = getPhases().filter(p => p.series_id === selectedSeries);
-    setPhases(allPhases);
-
-    if (allPhases.length > 0) {
-      // Default to phase 1
-      setSelectedPhaseId(allPhases[0].id);
-    }
+    const fetchPhases = async () => {
+      const allPhases = (await getPhases()).filter(p => p.series_id === selectedSeries);
+      setPhases(allPhases);
+      if (allPhases.length > 0) {
+        setSelectedPhaseId(allPhases[0].id);
+      }
+    };
+    fetchPhases();
   }, [selectedSeries]);
 
   useEffect(() => {
-    if (selectedPhaseId) {
-      const computed = calculateStandings(selectedSeries, selectedPhaseId);
-      setStandings(computed);
-    }
+    const fetchStandings = async () => {
+      if (selectedPhaseId) {
+        const computed = await calculateStandings(selectedSeries, selectedPhaseId);
+        setStandings(computed);
+      }
+    };
+    fetchStandings();
   }, [selectedPhaseId, selectedSeries]);
 
   const getClubDetails = (clubId: string) => {

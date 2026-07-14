@@ -14,28 +14,37 @@ export const Fixture: React.FC = () => {
   const [stadiums, setStadiums] = useState<Stadium[]>([]);
 
   useEffect(() => {
-    setClubs(getClubs());
-    setStadiums(getStadiums());
+    const fetchClubsAndStadiums = async () => {
+      setClubs(await getClubs());
+      setStadiums(await getStadiums());
+    };
+    fetchClubsAndStadiums();
   }, []);
 
   useEffect(() => {
-    const allPhases = getPhases().filter(p => p.series_id === selectedSeries);
-    setPhases(allPhases);
-    if (allPhases.length > 0) {
-      setSelectedPhaseId(allPhases[0].id);
-      setSelectedMatchday(1); // Reset matchday
-    }
+    const fetchPhases = async () => {
+      const allPhases = (await getPhases()).filter(p => p.series_id === selectedSeries);
+      setPhases(allPhases);
+      if (allPhases.length > 0) {
+        setSelectedPhaseId(allPhases[0].id);
+        setSelectedMatchday(1); // Reset matchday
+      }
+    };
+    fetchPhases();
   }, [selectedSeries]);
 
   useEffect(() => {
-    if (selectedPhaseId) {
-      const allMatches = getMatches().filter(
-        m => m.series_id === selectedSeries && 
-             m.phase_id === selectedPhaseId && 
-             m.matchday === selectedMatchday
-      );
-      setMatches(allMatches);
-    }
+    const fetchMatches = async () => {
+      if (selectedPhaseId) {
+        const allMatches = (await getMatches()).filter(
+          m => m.series_id === selectedSeries && 
+               m.phase_id === selectedPhaseId && 
+               m.matchday === selectedMatchday
+        );
+        setMatches(allMatches);
+      }
+    };
+    fetchMatches();
   }, [selectedPhaseId, selectedMatchday, selectedSeries]);
 
   const getClub = (clubId: string) => clubs.find(c => c.id === clubId);

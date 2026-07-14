@@ -20,40 +20,43 @@ export const DetallePartido: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'timeline' | 'lineups' | 'info'>('timeline');
 
   useEffect(() => {
-    const allMatches = getMatches();
-    const foundMatch = allMatches.find(m => m.id === id);
-    if (!foundMatch) return;
+    const fetchMatchDetails = async () => {
+      const allMatches = await getMatches();
+      const foundMatch = allMatches.find(m => m.id === id);
+      if (!foundMatch) return;
 
-    setMatch(foundMatch);
+      setMatch(foundMatch);
 
-    const allClubs = getClubs();
-    setHomeClub(allClubs.find(c => c.id === foundMatch.home_club_id) || null);
-    setAwayClub(allClubs.find(c => c.id === foundMatch.away_club_id) || null);
+      const allClubs = await getClubs();
+      setHomeClub(allClubs.find(c => c.id === foundMatch.home_club_id) || null);
+      setAwayClub(allClubs.find(c => c.id === foundMatch.away_club_id) || null);
 
-    const allStadiums = getStadiums();
-    setStadium(allStadiums.find(s => s.id === foundMatch.stadium_id) || null);
+      const allStadiums = await getStadiums();
+      setStadium(allStadiums.find(s => s.id === foundMatch.stadium_id) || null);
 
-    const allOfficials = getOfficials();
-    setReferee(allOfficials.find(o => o.id === foundMatch.referee_id) || null);
-    setVarOfficial(allOfficials.find(o => o.id === foundMatch.var_official_id) || null);
-    setCommissioner(allOfficials.find(o => o.id === foundMatch.match_commissioner_id) || null);
+      const allOfficials = await getOfficials();
+      setReferee(allOfficials.find(o => o.id === foundMatch.referee_id) || null);
+      setVarOfficial(allOfficials.find(o => o.id === foundMatch.var_official_id) || null);
+      setCommissioner(allOfficials.find(o => o.id === foundMatch.match_commissioner_id) || null);
 
-    const allEvents = getEvents().filter(e => e.match_id === foundMatch.id);
-    // If no events in DB yet, use some static default ones for match-1 to make the page look premium
-    if (allEvents.length === 0 && foundMatch.id === 'match-1') {
-      const defaultEvents: MatchEvent[] = [
-        { id: 'ev-1', match_id: foundMatch.id, player_id: 'LDU-a1', club_id: 'club-ldu', event_type: 'goal', minute: 24, extra_info: { penalty: false } },
-        { id: 'ev-2', match_id: foundMatch.id, player_id: 'BSC-m2', club_id: 'club-barcelona', event_type: 'yellow_card', minute: 38 },
-        { id: 'ev-3', match_id: foundMatch.id, player_id: 'BSC-a1', club_id: 'club-barcelona', event_type: 'goal', minute: 52 },
-        { id: 'ev-4', match_id: foundMatch.id, player_id: 'LDU-d1', club_id: 'club-ldu', event_type: 'red_card', minute: 77 },
-        { id: 'ev-5', match_id: foundMatch.id, player_id: 'LDU-m1', club_id: 'club-ldu', event_type: 'goal', minute: 89 }
-      ];
-      setEvents(defaultEvents);
-    } else {
-      setEvents(allEvents.sort((a, b) => a.minute - b.minute));
-    }
+      const allEvents = (await getEvents()).filter(e => e.match_id === foundMatch.id);
+      // If no events in DB yet, use some static default ones for match-1 to make the page look premium
+      if (allEvents.length === 0 && foundMatch.id === 'match-1') {
+        const defaultEvents: MatchEvent[] = [
+          { id: 'ev-1', match_id: foundMatch.id, player_id: 'LDU-a1', club_id: 'club-ldu', event_type: 'goal', minute: 24, extra_info: { penalty: false } },
+          { id: 'ev-2', match_id: foundMatch.id, player_id: 'BSC-m2', club_id: 'club-barcelona', event_type: 'yellow_card', minute: 38 },
+          { id: 'ev-3', match_id: foundMatch.id, player_id: 'BSC-a1', club_id: 'club-barcelona', event_type: 'goal', minute: 52 },
+          { id: 'ev-4', match_id: foundMatch.id, player_id: 'LDU-d1', club_id: 'club-ldu', event_type: 'red_card', minute: 77 },
+          { id: 'ev-5', match_id: foundMatch.id, player_id: 'LDU-m1', club_id: 'club-ldu', event_type: 'goal', minute: 89 }
+        ];
+        setEvents(defaultEvents);
+      } else {
+        setEvents(allEvents.sort((a, b) => a.minute - b.minute));
+      }
 
-    setPlayers(getPlayers());
+      setPlayers(await getPlayers());
+    };
+    fetchMatchDetails();
   }, [id]);
 
   if (!match) {
