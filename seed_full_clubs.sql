@@ -1,14 +1,16 @@
-
 -- =====================================================================
 -- COMPLETE LIGAPRO CLUBS SEED
 -- =====================================================================
 
--- First clean current incomplete clubs and matches if any
+-- First clean current incomplete data to avoid key conflicts
+DELETE FROM match_events;
+DELETE FROM disciplinary_sanctions;
 DELETE FROM matches;
 DELETE FROM clubs;
 DELETE FROM stadiums;
 DELETE FROM phases;
 DELETE FROM series;
+DELETE FROM officials;
 
 -- 1. Insert Series
 INSERT INTO series (id, name, slug, num_clubs, season_year) VALUES
