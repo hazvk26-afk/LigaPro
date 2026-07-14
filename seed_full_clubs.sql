@@ -1,8 +1,9 @@
+
 -- =====================================================================
--- COMPLETE LIGAPRO CLUBS SEED
+-- COMPLETE LIGAPRO CLUBS SEED (SERIE A & SERIE B)
 -- =====================================================================
 
--- First clean current incomplete data to avoid key conflicts
+-- First clean current data to avoid duplicate key conflicts
 DELETE FROM match_events;
 DELETE FROM disciplinary_sanctions;
 DELETE FROM matches;
@@ -45,7 +46,7 @@ INSERT INTO stadiums (id, name, city, altitude_m, capacity, turf_type, var_infra
 UPDATE stadiums SET quality_pro_certified = true, quality_pro_expiry = '2027-12-31', turf_height_mm = 22.0
 WHERE id = '550e8400-e29b-41d4-a716-446655440009';
 
--- 4. Insert All 16 Clubs
+-- 4. Insert All 26 Clubs
 INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
 ('550e8400-e29b-41d4-a716-446655440011', 'Barcelona Sporting Club', 'Barcelona SC', 'https://placehold.co/100x100/ffffff/000000?text=Barcelona%20SC', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440006', false);
 
@@ -93,6 +94,36 @@ INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_col
 
 INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
 ('550e8400-e29b-41d4-a716-446655440026', 'Imbabura Sporting Club', 'Imbabura SC', 'https://placehold.co/100x100/ffffff/000000?text=Imbabura%20SC', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440030', 'Manta Fútbol Club', 'Manta FC', 'https://placehold.co/100x100/ffffff/000000?text=Manta%20FC', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440008', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440031', 'Guayaquil City Fútbol Club', 'Guayaquil City', 'https://placehold.co/100x100/ffffff/000000?text=Guayaquil%20City', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440009', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440032', 'Cuniburo Fútbol Club', 'Cuniburo FC', 'https://placehold.co/100x100/ffffff/000000?text=Cuniburo%20FC', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440033', 'Chacaritas Fútbol Club', 'Chacaritas', 'https://placehold.co/100x100/ffffff/000000?text=Chacaritas', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440034', '9 de Octubre Fútbol Club', '9 de Octubre', 'https://placehold.co/100x100/ffffff/000000?text=9%20de%20Octubre', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440009', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440035', 'Leones del Norte', 'Leones del N.', 'https://placehold.co/100x100/ffffff/000000?text=Leones%20del%20N.', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440036', 'Club Deportivo Vargas Torres', 'Vargas Torres', 'https://placehold.co/100x100/ffffff/000000?text=Vargas%20Torres', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440037', 'San Antonio Fútbol Club', 'San Antonio', 'https://placehold.co/100x100/ffffff/000000?text=San%20Antonio', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440038', 'Independiente Juniors', 'Ind. Juniors', 'https://placehold.co/100x100/ffffff/000000?text=Ind.%20Juniors', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', true);
+
+INSERT INTO clubs (id, name, short_name, crest_url, primary_color, secondary_color, series_id, home_stadium_id, is_filial) VALUES
+('550e8400-e29b-41d4-a716-446655440039', 'Gualaceo Sporting Club', 'Gualaceo SC', 'https://placehold.co/100x100/ffffff/000000?text=Gualaceo%20SC', '#ffffff', '#000000', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', false);
 
 
 -- 5. Insert Sample Officials
