@@ -7,48 +7,175 @@
   --font-montserrat: "Montserrat", sans-serif;
   --font-barlow: "Barlow Condensed", sans-serif;
 
-  /* Brand Colors from DESIGN.md */
-  --color-brand-surface: #f8f9fa;
-  --color-brand-surface-dim: #d9dadb;
-  --color-brand-surface-bright: #f8f9fa;
-  --color-brand-surface-lowest: #ffffff;
-  --color-brand-surface-low: #f3f4f5;
-  --color-brand-surface-container: #edeeef;
-  --color-brand-surface-high: #e7e8e9;
-  --color-brand-surface-highest: #e1e3e4;
-  --color-brand-on-surface: #191c1d;
-  --color-brand-on-surface-variant: #43474e;
-  --color-brand-inverse-surface: #2e3132;
-  --color-brand-inverse-on-surface: #f0f1f2;
-  
-  --color-brand-outline: #74777f;
-  --color-brand-outline-variant: #c4c6cf;
-  
+  /* Colors matching Google Stitch styles directly (with and without brand- prefix) */
+  --color-primary: #000613;
   --color-brand-primary: #000613;
+  --color-on-primary: #ffffff;
   --color-brand-on-primary: #ffffff;
+  
+  --color-primary-container: #001f3f;
   --color-brand-primary-container: #001f3f;
+  --color-on-primary-container: #6f88ad;
   --color-brand-on-primary-container: #6f88ad;
+  
+  --color-inverse-primary: #afc8f0;
   --color-brand-inverse-primary: #afc8f0;
   
+  --color-secondary: #735c00;
   --color-brand-secondary: #735c00;
+  --color-on-secondary: #ffffff;
   --color-brand-on-secondary: #ffffff;
+  --color-secondary-container: #fed65b;
   --color-brand-secondary-container: #fed65b;
+  --color-on-secondary-container: #745c00;
   --color-brand-on-secondary-container: #745c00;
   
+  --color-secondary-fixed: #ffe088;
+  --color-brand-secondary-fixed: #ffe088;
+  --color-secondary-fixed-dim: #e9c349;
+  --color-brand-secondary-fixed-dim: #e9c349;
+  
+  --color-tertiary: #160000;
   --color-brand-tertiary: #160000;
+  --color-on-tertiary: #ffffff;
   --color-brand-on-tertiary: #ffffff;
+  --color-tertiary-container: #470001;
   --color-brand-tertiary-container: #470001;
+  --color-on-tertiary-container: #fa3d33;
   --color-brand-on-tertiary-container: #fa3d33;
   
+  --color-error: #ba1a1a;
   --color-brand-error: #ba1a1a;
+  --color-on-error: #ffffff;
   --color-brand-on-error: #ffffff;
+  --color-error-container: #ffdad6;
   --color-brand-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
   --color-brand-on-error-container: #93000a;
+
+  --color-surface: #f8f9fa;
+  --color-brand-surface: #f8f9fa;
+  --color-surface-dim: #d9dadb;
+  --color-brand-surface-dim: #d9dadb;
+  --color-surface-bright: #f8f9fa;
+  --color-brand-surface-bright: #f8f9fa;
+  --color-surface-lowest: #ffffff;
+  --color-brand-surface-lowest: #ffffff;
+  --color-surface-low: #f3f4f5;
+  --color-brand-surface-low: #f3f4f5;
+  
+  --color-surface-container: #edeeef;
+  --color-brand-surface-container: #edeeef;
+  --color-surface-container-low: #f3f4f5;
+  --color-brand-surface-container-low: #f3f4f5;
+  --color-surface-container-high: #e7e8e9;
+  --color-brand-surface-container-high: #e7e8e9;
+  --color-surface-container-highest: #e1e3e4;
+  --color-brand-surface-container-highest: #e1e3e4;
+  
+  --color-on-surface: #191c1d;
+  --color-brand-on-surface: #191c1d;
+  --color-on-surface-variant: #43474e;
+  --color-brand-on-surface-variant: #43474e;
+  --color-inverse-surface: #2e3132;
+  --color-brand-inverse-surface: #2e3132;
+  --color-inverse-on-surface: #f0f1f2;
+  --color-brand-inverse-on-surface: #f0f1f2;
+  
+  --color-outline: #74777f;
+  --color-brand-outline: #74777f;
+  --color-outline-variant: #c4c6cf;
+  --color-brand-outline-variant: #c4c6cf;
+}
+
+/* Custom Font Utilities to support Stitch class names */
+@utility font-headline-md {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+@utility font-headline-lg {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+}
+
+@utility font-display-lg {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+
+@utility font-body-md {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@utility font-body-lg {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+@utility font-label-bold {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+}
+
+@utility font-stats-number {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+/* Layout Padding and Grid Spacings */
+@utility p-md {
+  padding: 24px;
+}
+@utility py-sm {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+@utility px-md {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+@utility gap-md {
+  gap: 24px;
+}
+@utility mb-lg {
+  margin-bottom: 48px;
+}
+@utility gap-sm {
+  gap: 12px;
+}
+
+/* Glass card styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(233, 236, 239, 1);
+}
+
+.match-elevation {
+  box-shadow: 0px 4px 20px rgba(0, 31, 63, 0.08);
 }
 
 body {
   margin: 0;
-  font-family: var(--font-barlow);
-  background-color: var(--color-brand-surface);
-  color: var(--color-brand-on-surface);
+  font-family: "Barlow Condensed", sans-serif;
+  background-color: #f8f9fa;
+  color: #191c1d;
 }

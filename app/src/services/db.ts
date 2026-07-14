@@ -19,21 +19,54 @@ export const setCurrentUser = (user: UserProfile | null) => {
   }
 };
 
+// --- ID TRANSLATION MAPS BETWEEN FRONTEND SLUGS AND DB UUIDs ---
+const SERIES_MAP_TO_DB: Record<string, string> = {
+  'series-a': '550e8400-e29b-41d4-a716-446655440000',
+  'series-b': '550e8400-e29b-41d4-a716-446655440001'
+};
+const SERIES_MAP_FROM_DB: Record<string, string> = {
+  '550e8400-e29b-41d4-a716-446655440000': 'series-a',
+  '550e8400-e29b-41d4-a716-446655440001': 'series-b'
+};
+
+const PHASE_MAP_TO_DB: Record<string, string> = {
+  'phase-a-1': '550e8400-e29b-41d4-a716-446655440002',
+  'phase-a-2': '550e8400-e29b-41d4-a716-446655440003',
+  'phase-a-final': '550e8400-e29b-41d4-a716-446655440004',
+  'phase-b-1': '550e8400-e29b-41d4-a716-446655440005'
+};
+const PHASE_MAP_FROM_DB: Record<string, string> = {
+  '550e8400-e29b-41d4-a716-446655440002': 'phase-a-1',
+  '550e8400-e29b-41d4-a716-446655440003': 'phase-a-2',
+  '550e8400-e29b-41d4-a716-446655440004': 'phase-a-final',
+  '550e8400-e29b-41d4-a716-446655440005': 'phase-b-1'
+};
+
 // --- SUPABASE ASYNC QUERIES ---
 
 export const getSeries = async (): Promise<Series[]> => {
   const { data } = await supabase.from('series').select('*');
-  return (data || []) as Series[];
+  return (data || []).map(s => ({
+    ...s,
+    id: SERIES_MAP_FROM_DB[s.id] || s.id
+  })) as Series[];
 };
 
 export const getPhases = async (): Promise<Phase[]> => {
   const { data } = await supabase.from('phases').select('*');
-  return (data || []) as Phase[];
+  return (data || []).map(p => ({
+    ...p,
+    id: PHASE_MAP_FROM_DB[p.id] || p.id,
+    series_id: SERIES_MAP_FROM_DB[p.series_id] || p.series_id
+  })) as Phase[];
 };
 
 export const getClubs = async (): Promise<Club[]> => {
   const { data } = await supabase.from('clubs').select('*');
-  return (data || []) as Club[];
+  return (data || []).map(c => ({
+    ...c,
+    series_id: SERIES_MAP_FROM_DB[c.series_id] || c.series_id
+  })) as Club[];
 };
 
 export const getStadiums = async (): Promise<Stadium[]> => {
@@ -53,12 +86,19 @@ export const getOfficials = async (): Promise<Official[]> => {
 
 export const getMatches = async (): Promise<Match[]> => {
   const { data } = await supabase.from('matches').select('*');
-  return (data || []) as Match[];
+  return (data || []).map(m => ({
+    ...m,
+    series_id: SERIES_MAP_FROM_DB[m.series_id] || m.series_id,
+    phase_id: PHASE_MAP_FROM_DB[m.phase_id] || m.phase_id
+  })) as Match[];
 };
 
 export const getSanctions = async (): Promise<DisciplinarySanction[]> => {
   const { data } = await supabase.from('disciplinary_sanctions').select('*');
-  return (data || []) as DisciplinarySanction[];
+  return (data || []).map(s => ({
+    ...s,
+    phase_id: s.phase_id ? (PHASE_MAP_FROM_DB[s.phase_id] || s.phase_id) : null
+  })) as DisciplinarySanction[];
 };
 
 export const getProfiles = async (): Promise<UserProfile[]> => {
@@ -79,7 +119,12 @@ export const getNotifications = async (): Promise<Notification[]> => {
 // --- MUTATIONS ---
 
 export const upsertMatch = async (match: Match) => {
-  return await supabase.from('matches').upsert(match);
+  const dbMatch = {
+    ...match,
+    series_id: SERIES_MAP_TO_DB[match.series_id] || match.series_id,
+    phase_id: PHASE_MAP_TO_DB[match.phase_id] || match.phase_id
+  };
+  return await supabase.from('matches').upsert(dbMatch);
 };
 
 export const insertSanction = async (sanction: DisciplinarySanction) => {
@@ -92,7 +137,7 @@ export const insertSanction = async (sanction: DisciplinarySanction) => {
     description: sanction.description,
     amount_usd: sanction.amount_usd,
     suspended_matches: sanction.suspended_matches,
-    phase_id: sanction.phase_id || null,
+    phase_id: sanction.phase_id ? (PHASE_MAP_TO_DB[sanction.phase_id] || sanction.phase_id) : null,
     status: sanction.status
   };
   return await supabase.from('disciplinary_sanctions').insert(dbSanct);
