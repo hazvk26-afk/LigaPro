@@ -425,6 +425,19 @@ export const Login: React.FC = () => {
               </button>
             </form>
             
+            <div className="text-center mt-md">
+              <button 
+                onClick={() => {
+                  setModalOpen(false);
+                  setIsRegistering(true);
+                  setRegRoleType('admin');
+                }}
+                className="text-brand-secondary-container hover:underline text-xs font-bold uppercase tracking-wider"
+              >
+                ¿No tienes cuenta? Regístrate como Administrativo
+              </button>
+            </div>
+            
             <div className="mt-lg pt-md border-t border-white/5 text-center">
               <p className="font-barlow text-[11px] text-white/40 italic">
                 Este sistema está monitoreado. Ingrese con sus credenciales registradas.

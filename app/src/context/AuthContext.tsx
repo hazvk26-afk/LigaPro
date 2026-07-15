@@ -40,22 +40,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginAsAdmin = async (username: string, passwordInput?: string): Promise<boolean> => {
-    // Check in database profiles for admin-like roles
-    const profiles = await getProfiles();
-    const found = profiles.find(
-      p => p.display_name.toLowerCase().includes(username.toLowerCase()) || 
-           p.role === username.toLowerCase() || 
-           (username.toLowerCase() === 'admin' && p.role === 'maintenance_chief')
-    );
+    try {
+      const profiles = await getProfiles();
+      const found = profiles.find(
+        p => p.display_name.toLowerCase().includes(username.toLowerCase()) || 
+             p.role === username.toLowerCase() || 
+             (username.toLowerCase() === 'admin' && p.role === 'maintenance_chief')
+      );
 
-    if (found) {
-      // Validate password if it is stored in the profile
-      if (found.password && found.password !== passwordInput) {
-        return false;
+      if (found) {
+        // Validate password if it is stored in the profile
+        if (found.password && found.password !== passwordInput) {
+          return false;
+        }
+        setUser(found);
+        saveCurrentUser(found);
+        return true;
       }
-      setUser(found);
-      saveCurrentUser(found);
-      return true;
+    } catch (err) {
+      console.warn("Failed to fetch database profiles, using fallback credentials:", err);
     }
     
     // Fallback default admin if typed 'admin'
