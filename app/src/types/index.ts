@@ -178,6 +178,7 @@ export interface UserProfile {
     sanctions: boolean;
   };
   avatar_url?: string;
+  password?: string;
 }
 
 export interface Notification {

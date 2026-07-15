@@ -10,12 +10,14 @@ export const Login: React.FC = () => {
   
   const [modalOpen, setModalOpen] = useState(false);
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   // Registration state
   const [isRegistering, setIsRegistering] = useState(false);
   const [regRoleType, setRegRoleType] = useState<'hincha' | 'admin'>('hincha');
   const [regName, setRegName] = useState('');
+  const [regPassword, setRegPassword] = useState('');
   const [regAdminRole, setRegAdminRole] = useState<'admin' | 'maintenance_chief' | 'technician' | 'manager'>('admin');
   const [regClubId, setRegClubId] = useState('');
   
@@ -61,18 +63,18 @@ export const Login: React.FC = () => {
       return;
     }
 
-    const success = await loginAsAdmin(username.trim());
+    const success = await loginAsAdmin(username.trim(), password.trim());
     if (success) {
       navigate('/admin');
     } else {
-      setError('Credenciales corporativas no válidas. Pruebe con "admin" o el nombre de un administrativo.');
+      setError('Credenciales no válidas. Verifique el usuario o la contraseña ingresada.');
     }
   };
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!regName.trim()) {
-      setError('Por favor, ingrese su nombre completo.');
+    if (!regName.trim() || !regPassword.trim()) {
+      setError('Por favor, ingrese su nombre y su contraseña.');
       return;
     }
 
@@ -91,7 +93,8 @@ export const Login: React.FC = () => {
         match_reminders: true,
         results: true,
         sanctions: regRoleType === 'admin'
-      }
+      },
+      password: regPassword.trim()
     };
 
     try {
@@ -188,7 +191,10 @@ export const Login: React.FC = () => {
               {/* Acceso Administrativo Card */}
               <button 
                 className="group relative bg-white/5 border border-brand-secondary-container/20 hover:border-brand-secondary-container/40 p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[300px]"
-                onClick={() => setModalOpen(true)}
+                onClick={() => {
+                  setModalOpen(true);
+                  setError('');
+                }}
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary-container/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-brand-secondary-container/20 transition-all"></div>
                 <div>
@@ -284,6 +290,18 @@ export const Login: React.FC = () => {
                 />
               </div>
 
+              <div className="space-y-xs">
+                <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Contraseña *</label>
+                <input
+                  type="password"
+                  required
+                  value={regPassword}
+                  onChange={e => setRegPassword(e.target.value)}
+                  placeholder="Contraseña de acceso"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md"
+                />
+              </div>
+
               {regRoleType === 'hincha' ? (
                 <div className="space-y-xs animate-fade-in">
                   <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Club Favorito *</label>
@@ -361,6 +379,7 @@ export const Login: React.FC = () => {
                 setModalOpen(false);
                 setError('');
                 setUsername('');
+                setPassword('');
               }}
             >
               <span className="material-symbols-outlined">close</span>
@@ -382,7 +401,7 @@ export const Login: React.FC = () => {
                 <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Usuario</label>
                 <input 
                   className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md" 
-                  placeholder="ID de Empleado (p. ej. admin o tu nombre de registro)" 
+                  placeholder="Nombre de usuario o rol" 
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -391,12 +410,12 @@ export const Login: React.FC = () => {
               <div className="space-y-xs">
                 <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Contraseña</label>
                 <input 
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all" 
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md" 
                   placeholder="••••••••" 
                   type="password"
-                  disabled 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                <span className="text-[10px] text-white/40 block ml-1 italic">*Para desarrollo, cualquier contraseña es válida (campo deshabilitado)</span>
               </div>
               <button 
                 type="submit"
@@ -408,7 +427,7 @@ export const Login: React.FC = () => {
             
             <div className="mt-lg pt-md border-t border-white/5 text-center">
               <p className="font-barlow text-[11px] text-white/40 italic">
-                Este sistema está monitoreado. Para ingresar sin cuenta previa, usa la opción de registro de la pantalla principal.
+                Este sistema está monitoreado. Ingrese con sus credenciales registradas.
               </p>
             </div>
           </div>

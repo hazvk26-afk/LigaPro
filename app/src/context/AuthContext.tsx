@@ -6,7 +6,7 @@ interface AuthContextType {
   user: UserProfile | null;
   loading: boolean;
   loginAsHincha: (clubId?: string | null) => void;
-  loginAsAdmin: (username: string) => Promise<boolean>;
+  loginAsAdmin: (username: string, password?: string) => Promise<boolean>;
   loginWithProfile: (profile: UserProfile) => void;
   logout: () => void;
 }
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveCurrentUser(defaultHincha);
   };
 
-  const loginAsAdmin = async (username: string): Promise<boolean> => {
+  const loginAsAdmin = async (username: string, passwordInput?: string): Promise<boolean> => {
     // Check in database profiles for admin-like roles
     const profiles = await getProfiles();
     const found = profiles.find(
@@ -49,6 +49,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     if (found) {
+      // Validate password if it is stored in the profile
+      if (found.password && found.password !== passwordInput) {
+        return false;
+      }
       setUser(found);
       saveCurrentUser(found);
       return true;
