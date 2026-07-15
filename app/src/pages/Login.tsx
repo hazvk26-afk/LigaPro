@@ -112,7 +112,7 @@ export const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Error al registrar el perfil en la base de datos de Supabase.');
+      setError(err.message || 'Error al registrar el perfil.');
     } finally {
       setRegLoading(false);
     }
@@ -221,8 +221,9 @@ export const Login: React.FC = () => {
             {/* Sign Up Navigation Trigger */}
             <div className="text-center mt-md">
               <p className="font-barlow text-body-lg text-white/50">
-                ¿No tienes una cuenta registrada en tu Supabase?{' '}
+                ¿No tienes una cuenta registrada?{' '}
                 <button 
+                  type="button"
                   onClick={() => {
                     setIsRegistering(true);
                     setError('');
@@ -240,7 +241,7 @@ export const Login: React.FC = () => {
             <div className="text-center mb-lg">
               <span className="material-symbols-outlined text-brand-secondary-container text-[48px] mb-base">person_add</span>
               <h3 className="font-montserrat text-headline-md text-white font-bold">Crear Cuenta LigaPro</h3>
-              <p className="font-barlow text-body-md text-white/60">Regístrate directamente en tu base de datos de Supabase</p>
+              <p className="font-barlow text-body-md text-white/60">Regístrate directamente en el sistema oficial de LigaPro</p>
             </div>
 
             <form className="space-y-md" onSubmit={handleRegisterSubmit}>

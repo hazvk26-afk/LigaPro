@@ -84,7 +84,7 @@ export const GestionClubes: React.FC = () => {
       await fetchClubsAndStadiums();
     } catch (err: any) {
       console.error(err);
-      setStatusMessage({ type: 'error', text: err.message || 'Error al guardar el club en Supabase.' });
+      setStatusMessage({ type: 'error', text: err.message || 'Error al registrar el club.' });
     }
   };
 
@@ -263,7 +263,7 @@ export const GestionClubes: React.FC = () => {
               type="submit"
               className="bg-brand-primary hover:bg-brand-primary-container text-white px-md py-2 rounded-lg font-label-bold text-xs uppercase tracking-wider transition-all"
             >
-              Guardar en Supabase
+              Registrar Club
             </button>
           </div>
         </form>

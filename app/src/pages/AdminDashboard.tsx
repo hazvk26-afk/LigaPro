@@ -162,7 +162,7 @@ export const AdminDashboard: React.FC = () => {
         {/* Card 3 */}
         <div className="bg-white p-md border border-brand-outline-variant/30 rounded-xl flex flex-col justify-between shadow-sm">
           <div className="flex justify-between items-start">
-            <span className="material-symbols-outlined text-brand-secondary p-2 bg-brand-secondary-container/20 rounded">whistle</span>
+            <span className="material-symbols-outlined text-brand-secondary p-2 bg-brand-secondary-container/20 rounded">sports</span>
             <span className="text-[10px] font-bold text-brand-on-surface-variant uppercase">Cuerpo</span>
           </div>
           <div className="mt-4">

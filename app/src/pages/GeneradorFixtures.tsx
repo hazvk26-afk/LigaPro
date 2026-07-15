@@ -110,8 +110,14 @@ export const GeneradorFixtures: React.FC = () => {
       return;
     }
 
+    const startDateTime = new Date(startDate);
+    if (startDateTime < new Date()) {
+      setStatusMessage({ type: 'error', text: 'La fecha de inicio de la primera jornada debe ser posterior a la fecha y hora actual.' });
+      return;
+    }
+
     const confirmGen = window.confirm(
-      '¡ADVERTENCIA! Esta acción borrará permanentemente todos los partidos que estén programados actualmente para esta Fase y Serie en la base de datos de Supabase, para reemplazarlos con el nuevo fixture. ¿Desea continuar?'
+      '¡ADVERTENCIA! Esta acción borrará permanentemente todos los partidos que estén programados actualmente para esta Fase y Serie en el sistema, para reemplazarlos con el nuevo fixture. ¿Desea continuar?'
     );
     if (!confirmGen) return;
 
@@ -282,6 +288,7 @@ export const GeneradorFixtures: React.FC = () => {
             <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Fecha de Inicio de Primera Jornada</label>
             <input
               type="datetime-local"
+              min={new Date().toISOString().slice(0, 16)}
               value={startDate}
               onChange={e => setStartDate(e.target.value)}
               className="w-full px-md py-2 bg-brand-surface rounded border border-brand-outline-variant/50 focus:ring-2 focus:ring-brand-secondary outline-none text-body-md"
@@ -326,7 +333,7 @@ export const GeneradorFixtures: React.FC = () => {
             ) : (
               <>
                 <span className="material-symbols-outlined text-sm">sync</span>
-                Generar Fixture en Supabase
+                Generar Fixture en el Sistema
               </>
             )}
           </button>

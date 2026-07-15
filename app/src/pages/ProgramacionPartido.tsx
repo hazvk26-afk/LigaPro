@@ -145,6 +145,18 @@ export const ProgramacionPartido: React.FC = () => {
     e.preventDefault();
     setHasSubmitted(true);
 
+    const scheduledDateTime = new Date(`${scheduledDate}T${scheduledTime}:00-05:00`);
+    const now = new Date();
+    
+    if (status === 'scheduled' && scheduledDateTime < now) {
+      setValidation({
+        valid: false,
+        errors: ['No se puede registrar un partido en una fecha o un horario que ya pasó.'],
+        warnings: []
+      });
+      return;
+    }
+
     if (homeClubId === awayClubId) {
       setValidation({
         valid: false,
@@ -385,6 +397,7 @@ export const ProgramacionPartido: React.FC = () => {
                   <input 
                     className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none transition-all"
                     type="date"
+                    min={new Date().toISOString().split('T')[0]}
                     value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
                   />
