@@ -332,14 +332,59 @@ export const AdminDashboard: React.FC = () => {
                     onClick={() => navigate(`/admin/partidos/${match.id}/editar`)}
                     className="bg-white p-md border border-brand-outline-variant/30 rounded-lg shadow-sm hover:scale-[1.01] transition-transform cursor-pointer flex justify-between items-center text-xs font-barlow font-bold"
                   >
-                    <div className="flex flex-col">
+                    <div className="flex flex-col items-start">
                       <span className="text-[9px] text-brand-outline uppercase">Jornada {match.matchday}</span>
                       <span className="text-[10px] text-brand-on-surface-variant font-normal">{matchDate}</span>
+                      {match.status === 'live' && (
+                        <span className="text-[8px] bg-green-100 text-green-800 px-1.5 py-0.5 rounded font-black uppercase mt-1 animate-pulse flex items-center gap-0.5">
+                          <span className="w-1 h-1 bg-green-600 rounded-full"></span> En Vivo
+                        </span>
+                      )}
+                      {match.status === 'finished' && (
+                        <span className="text-[8px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-black uppercase mt-1">
+                          Finalizado
+                        </span>
+                      )}
+                      {match.status === 'suspended' && (
+                        <span className="text-[8px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded font-black uppercase mt-1">
+                          Suspendido
+                        </span>
+                      )}
+                      {match.status === 'postponed' && (
+                        <span className="text-[8px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-black uppercase mt-1">
+                          Postergado
+                        </span>
+                      )}
+                      {match.status === 'walkover' && (
+                        <span className="text-[8px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-black uppercase mt-1">
+                          Walkover
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center gap-xs text-brand-primary">
-                      <span className="text-right w-16 truncate uppercase">{home?.short_name}</span>
-                      <span className="text-brand-on-surface-variant font-normal">vs</span>
-                      <span className="text-left w-16 truncate uppercase">{away?.short_name}</span>
+                    <div className="flex items-center gap-sm text-brand-primary">
+                      <div className="flex items-center gap-xs">
+                        <span className="text-right w-16 truncate uppercase">{home?.short_name}</span>
+                        {match.status !== 'scheduled' && (
+                          <span className="bg-brand-primary text-white px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
+                            {match.home_score}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {match.status === 'scheduled' ? (
+                        <span className="text-brand-on-surface-variant font-normal text-[10px]">vs</span>
+                      ) : (
+                        <span className="text-brand-on-surface-variant font-normal text-[10px]">-</span>
+                      )}
+
+                      <div className="flex items-center gap-xs">
+                        {match.status !== 'scheduled' && (
+                          <span className="bg-brand-primary text-white px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
+                            {match.away_score}
+                          </span>
+                        )}
+                        <span className="text-left w-16 truncate uppercase">{away?.short_name}</span>
+                      </div>
                     </div>
                     <span className="material-symbols-outlined text-brand-outline text-sm">edit</span>
                   </div>
