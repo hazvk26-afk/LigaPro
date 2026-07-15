@@ -427,7 +427,10 @@ export const Login: React.FC = () => {
             
             <div className="text-center mt-md">
               <button 
-                onClick={() => {
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   setModalOpen(false);
                   setIsRegistering(true);
                   setRegRoleType('admin');
