@@ -108,6 +108,7 @@ export interface Match {
   suspension_reason?: string;
   rescheduled_from_match_id?: string;
   doping_control_officer_id?: string;
+  created_at?: string;
 }
 
 export type MatchEventType =

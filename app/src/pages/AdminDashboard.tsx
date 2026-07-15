@@ -38,7 +38,14 @@ export const AdminDashboard: React.FC = () => {
       
       const scheduled = allMatches
         .filter(m => m.status === 'scheduled')
-        .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime());
+        .sort((a, b) => {
+          const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+          const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+          if (aTime !== bTime) {
+            return bTime - aTime; // Newest creation first
+          }
+          return new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime();
+        });
       setUpcomingMatches(scheduled.slice(0, 5));
 
       // 3. Standings (Top 5 Serie A)
@@ -299,14 +306,14 @@ export const AdminDashboard: React.FC = () => {
         {/* Upcoming Matches */}
         <div className="space-y-4">
           <h3 className="font-montserrat text-headline-md font-bold uppercase italic tracking-tighter border-b-2 border-brand-primary pb-2 flex items-center text-brand-primary">
-            <span className="material-symbols-outlined mr-2 text-brand-secondary">calendar_today</span>
-            Próximos Partidos Programados
+            <span className="material-symbols-outlined mr-2 text-brand-secondary">history</span>
+            Partidos Creados Recientemente
           </h3>
 
           <div className="space-y-3">
             {upcomingMatches.length === 0 ? (
               <div className="bg-white p-6 border-t-4 border-brand-outline-variant/30 rounded-lg shadow-sm text-center">
-                <p className="font-montserrat text-sm font-bold text-brand-primary">No hay partidos programados</p>
+                <p className="font-montserrat text-sm font-bold text-brand-primary">No hay partidos programados recientemente</p>
                 <p className="font-barlow text-xs text-brand-on-surface-variant/80 mt-1">Crea un nuevo partido arriba para comenzar.</p>
               </div>
             ) : (
