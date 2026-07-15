@@ -303,7 +303,7 @@ export const Login: React.FC = () => {
                 />
               </div>
 
-              {regRoleType === 'hincha' ? (
+              {regRoleType === 'hincha' && (
                 <div className="space-y-xs animate-fade-in">
                   <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Club Favorito *</label>
                   <select
@@ -316,20 +316,6 @@ export const Login: React.FC = () => {
                         {c.name} ({c.series_id === 'series-a' ? 'Serie A' : 'Serie B'})
                       </option>
                     ))}
-                  </select>
-                </div>
-              ) : (
-                <div className="space-y-xs animate-fade-in">
-                  <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Rol Operativo *</label>
-                  <select
-                    value={regAdminRole}
-                    onChange={e => setRegAdminRole(e.target.value as any)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md"
-                  >
-                    <option value="admin" className="bg-brand-primary-container text-white">Administrador General</option>
-                    <option value="maintenance_chief" className="bg-brand-primary-container text-white">Director de Escenarios</option>
-                    <option value="technician" className="bg-brand-primary-container text-white">Técnico Arbitral</option>
-                    <option value="manager" className="bg-brand-primary-container text-white">Coordinador del Torneo</option>
                   </select>
                 </div>
               )}
