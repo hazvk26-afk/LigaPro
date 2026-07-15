@@ -510,7 +510,7 @@ export const ProgramacionPartido: React.FC = () => {
                   min={0}
                   value={homeScore}
                   onChange={(e) => setHomeScore(e.target.value === '' ? '' : Number(e.target.value))}
-                  disabled={status === 'scheduled'}
+                  disabled={status !== 'live' && status !== 'finished'}
                 />
               </div>
               
@@ -522,7 +522,7 @@ export const ProgramacionPartido: React.FC = () => {
                   min={0}
                   value={awayScore}
                   onChange={(e) => setAwayScore(e.target.value === '' ? '' : Number(e.target.value))}
-                  disabled={status === 'scheduled'}
+                  disabled={status !== 'live' && status !== 'finished'}
                 />
               </div>
             </div>

@@ -364,21 +364,21 @@ export const AdminDashboard: React.FC = () => {
                     <div className="flex items-center gap-sm text-brand-primary">
                       <div className="flex items-center gap-xs">
                         <span className="text-right w-16 truncate uppercase">{home?.short_name}</span>
-                        {match.status !== 'scheduled' && (
+                        {(match.status === 'live' || match.status === 'finished') && (
                           <span className="bg-brand-primary text-white px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
                             {match.home_score}
                           </span>
                         )}
                       </div>
                       
-                      {match.status === 'scheduled' ? (
-                        <span className="text-brand-on-surface-variant font-normal text-[10px]">vs</span>
-                      ) : (
+                      {(match.status === 'live' || match.status === 'finished') ? (
                         <span className="text-brand-on-surface-variant font-normal text-[10px]">-</span>
+                      ) : (
+                        <span className="text-brand-on-surface-variant font-normal text-[10px]">vs</span>
                       )}
 
                       <div className="flex items-center gap-xs">
-                        {match.status !== 'scheduled' && (
+                        {(match.status === 'live' || match.status === 'finished') && (
                           <span className="bg-brand-primary text-white px-1.5 py-0.5 rounded text-[10px] font-mono font-bold">
                             {match.away_score}
                           </span>
