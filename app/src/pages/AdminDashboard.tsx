@@ -37,7 +37,6 @@ export const AdminDashboard: React.FC = () => {
       setLiveMatches(allMatches.filter(m => m.status === 'live'));
       
       const scheduled = allMatches
-        .filter(m => m.status === 'scheduled')
         .sort((a, b) => {
           const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
           const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
