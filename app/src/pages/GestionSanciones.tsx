@@ -86,7 +86,7 @@ export const GestionSanciones: React.FC = () => {
     if (!formDesc.trim()) return;
 
     const newSanct: DisciplinarySanction = {
-      id: Math.random().toString(36).substring(2, 11),
+      id: crypto.randomUUID(),
       player_id: formPlayerId || null,
       club_id: formClubId,
       sanction_type: formType,

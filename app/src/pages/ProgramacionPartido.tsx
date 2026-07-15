@@ -181,7 +181,7 @@ export const ProgramacionPartido: React.FC = () => {
     const isoDatetime = `${scheduledDate}T${scheduledTime}:00-05:00`;
 
     const matchObject: Match = {
-      id: id || Math.random().toString(36).substring(2, 11),
+      id: id || crypto.randomUUID(),
       series_id: seriesId,
       phase_id: phaseId,
       matchday: Number(matchday),
