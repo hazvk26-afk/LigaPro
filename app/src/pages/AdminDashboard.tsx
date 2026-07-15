@@ -12,6 +12,7 @@ export const AdminDashboard: React.FC = () => {
   
   const [criticalAlerts, setCriticalAlerts] = useState<{ id: string; title: string; desc: string; type: 'error' | 'warning' | 'info'; actionLabel?: string; path?: string }[]>([]);
   const [liveMatches, setLiveMatches] = useState<Match[]>([]);
+  const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
   const [standings, setStandings] = useState<Standing[]>([]);
   const [clubs, setClubs] = useState<Club[]>([]);
 
@@ -31,9 +32,14 @@ export const AdminDashboard: React.FC = () => {
       const allStadiums = await getStadiums();
       setStadiumsCount(allStadiums.filter(s => s.is_qualified).length);
 
-      // 2. Live Matches
+      // 2. Live & Upcoming Matches
       const allMatches = await getMatches();
       setLiveMatches(allMatches.filter(m => m.status === 'live'));
+      
+      const scheduled = allMatches
+        .filter(m => m.status === 'scheduled')
+        .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime());
+      setUpcomingMatches(scheduled.slice(0, 5));
 
       // 3. Standings (Top 5 Serie A)
       const allPhases = await getPhases();
@@ -283,6 +289,52 @@ export const AdminDashboard: React.FC = () => {
                         <span className="text-xs font-bold uppercase truncate max-w-[80px]">{away?.short_name}</span>
                       </div>
                     </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* Upcoming Matches */}
+        <div className="space-y-4">
+          <h3 className="font-montserrat text-headline-md font-bold uppercase italic tracking-tighter border-b-2 border-brand-primary pb-2 flex items-center text-brand-primary">
+            <span className="material-symbols-outlined mr-2 text-brand-secondary">calendar_today</span>
+            Próximos Partidos Programados
+          </h3>
+
+          <div className="space-y-3">
+            {upcomingMatches.length === 0 ? (
+              <div className="bg-white p-6 border-t-4 border-brand-outline-variant/30 rounded-lg shadow-sm text-center">
+                <p className="font-montserrat text-sm font-bold text-brand-primary">No hay partidos programados</p>
+                <p className="font-barlow text-xs text-brand-on-surface-variant/80 mt-1">Crea un nuevo partido arriba para comenzar.</p>
+              </div>
+            ) : (
+              upcomingMatches.map(match => {
+                const home = getClub(match.home_club_id);
+                const away = getClub(match.away_club_id);
+                const matchDate = new Date(match.scheduled_at).toLocaleDateString('es-EC', {
+                  day: '2-digit',
+                  month: 'short',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                });
+                return (
+                  <div 
+                    key={match.id}
+                    onClick={() => navigate(`/admin/partidos/${match.id}/editar`)}
+                    className="bg-white p-md border border-brand-outline-variant/30 rounded-lg shadow-sm hover:scale-[1.01] transition-transform cursor-pointer flex justify-between items-center text-xs font-barlow font-bold"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-[9px] text-brand-outline uppercase">Jornada {match.matchday}</span>
+                      <span className="text-[10px] text-brand-on-surface-variant font-normal">{matchDate}</span>
+                    </div>
+                    <div className="flex items-center gap-xs text-brand-primary">
+                      <span className="text-right w-16 truncate uppercase">{home?.short_name}</span>
+                      <span className="text-brand-on-surface-variant font-normal">vs</span>
+                      <span className="text-left w-16 truncate uppercase">{away?.short_name}</span>
+                    </div>
+                    <span className="material-symbols-outlined text-brand-outline text-sm">edit</span>
                   </div>
                 );
               })
