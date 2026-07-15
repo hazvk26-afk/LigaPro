@@ -7,6 +7,7 @@ interface AuthContextType {
   loading: boolean;
   loginAsHincha: (clubId?: string | null) => void;
   loginAsAdmin: (username: string) => Promise<boolean>;
+  loginWithProfile: (profile: UserProfile) => void;
   logout: () => void;
 }
 
@@ -68,13 +69,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
+  const loginWithProfile = (profile: UserProfile) => {
+    setUser(profile);
+    saveCurrentUser(profile);
+  };
+
   const logout = () => {
     setUser(null);
     saveCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginAsHincha, loginAsAdmin, logout }}>
+    <AuthContext.Provider value={{ user, loading, loginAsHincha, loginAsAdmin, loginWithProfile, logout }}>
       {children}
     </AuthContext.Provider>
   );

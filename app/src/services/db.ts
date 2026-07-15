@@ -155,6 +155,16 @@ export const insertClub = async (club: Club) => {
   return await supabase.from('clubs').insert(dbClub);
 };
 
+export const insertProfile = async (profile: UserProfile) => {
+  return await supabase.from('user_profiles').insert({
+    id: profile.id,
+    display_name: profile.display_name,
+    role: profile.role,
+    favorite_club_id: profile.favorite_club_id || null,
+    notification_preferences: profile.notification_preferences || {}
+  });
+};
+
 export const clearMatchesByPhase = async (seriesId: string, phaseId: string) => {
   const dbSeriesId = SERIES_MAP_TO_DB[seriesId] || seriesId;
   const dbPhaseId = PHASE_MAP_TO_DB[phaseId] || phaseId;

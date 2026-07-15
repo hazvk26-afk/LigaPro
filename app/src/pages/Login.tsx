@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getClubs, insertProfile } from '../services/db';
+import { Club, UserProfile } from '../types';
 
 export const Login: React.FC = () => {
-  const { loginAsHincha, loginAsAdmin, user } = useAuth();
+  const { loginAsHincha, loginAsAdmin, loginWithProfile, user } = useAuth();
   const navigate = useNavigate();
   
   const [modalOpen, setModalOpen] = useState(false);
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
 
+  // Registration state
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [regRoleType, setRegRoleType] = useState<'hincha' | 'admin'>('hincha');
+  const [regName, setRegName] = useState('');
+  const [regAdminRole, setRegAdminRole] = useState<'admin' | 'maintenance_chief' | 'technician' | 'manager'>('admin');
+  const [regClubId, setRegClubId] = useState('');
+  
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [regLoading, setRegLoading] = useState(false);
+
   // Redirect if already logged in
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       if (user.role === 'hincha') {
         navigate('/');
@@ -20,6 +32,22 @@ export const Login: React.FC = () => {
       }
     }
   }, [user, navigate]);
+
+  // Load clubs list for registration
+  useEffect(() => {
+    const fetchClubs = async () => {
+      try {
+        const list = await getClubs();
+        setClubs(list);
+        if (list.length > 0) {
+          setRegClubId(list[0].id);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchClubs();
+  }, []);
 
   const handleHinchaClick = () => {
     loginAsHincha();
@@ -41,6 +69,52 @@ export const Login: React.FC = () => {
     }
   };
 
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regName.trim()) {
+      setError('Por favor, ingrese su nombre completo.');
+      return;
+    }
+
+    setRegLoading(true);
+    setError('');
+
+    const newId = crypto.randomUUID();
+    const finalRole = regRoleType === 'hincha' ? 'hincha' : regAdminRole;
+
+    const newProfile: UserProfile = {
+      id: newId,
+      display_name: regName.trim(),
+      role: finalRole,
+      favorite_club_id: regRoleType === 'hincha' ? regClubId : null,
+      notification_preferences: {
+        match_reminders: true,
+        results: true,
+        sanctions: regRoleType === 'admin'
+      }
+    };
+
+    try {
+      const response = await insertProfile(newProfile);
+      if (response.error) throw response.error;
+
+      // Automatically login
+      loginWithProfile(newProfile);
+
+      // Redirect
+      if (newProfile.role === 'hincha') {
+        navigate('/');
+      } else {
+        navigate('/admin');
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Error al registrar el perfil en la base de datos de Supabase.');
+    } finally {
+      setRegLoading(false);
+    }
+  };
+
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden font-body-md bg-brand-primary text-white">
       {/* Stadium Texture Background */}
@@ -54,11 +128,11 @@ export const Login: React.FC = () => {
         }}
       />
       
-      {/* Background Radial Gradient */}
+      {/* Background Gradient */}
       <div className="fixed inset-0 z-0 bg-radial from-brand-primary-container to-brand-primary opacity-90" />
 
-      {/* Main Content Container */}
-      <main className="relative z-10 w-full max-w-[1440px] px-md flex flex-col items-center justify-center min-h-screen">
+      {/* Main Container */}
+      <main className="relative z-10 w-full max-w-[1440px] px-md flex flex-col items-center justify-center min-h-screen py-lg">
         {/* Logo Section */}
         <div className="mb-lg text-center animate-fade-in">
           <div className="relative group">
@@ -74,67 +148,198 @@ export const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Welcome Message */}
-        <div className="text-center mb-xl max-w-2xl px-md">
-          <h1 className="font-montserrat text-[28px] md:text-headline-lg text-white mb-sm leading-tight font-bold">
-            Bienvenido a la gestión oficial del fútbol ecuatoriano
-          </h1>
-          <p className="font-barlow text-body-lg text-white/60 max-w-lg mx-auto">
-            Seleccione su perfil de acceso para continuar a la plataforma integrada de administración y noticias.
-          </p>
-        </div>
-
-        {/* Role Selection Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full max-w-4xl px-md">
-          {/* Perfil Hincha Card */}
-          <button 
-            className="group relative bg-white/5 border border-white/10 hover:border-white/20 p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[320px]"
-            onClick={handleHinchaClick}
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-brand-secondary/20 transition-all"></div>
-            <div>
-              <div className="mb-md">
-                <span className="material-symbols-outlined text-[48px] text-brand-secondary-container group-hover:scale-110 transition-transform inline-block">
-                  sports_soccer
-                </span>
-              </div>
-              <h2 className="font-montserrat text-headline-md text-white mb-xs font-semibold">Perfil Hincha</h2>
-              <p className="font-barlow text-body-md text-white/70">
-                Acceso público a noticias de última hora, resultados en tiempo real y estadísticas oficiales de la liga.
+        {!isRegistering ? (
+          <>
+            {/* Welcome Message */}
+            <div className="text-center mb-xl max-w-2xl px-md">
+              <h1 className="font-montserrat text-[28px] md:text-headline-lg text-white mb-sm leading-tight font-bold">
+                Bienvenido a la gestión oficial del fútbol ecuatoriano
+              </h1>
+              <p className="font-barlow text-body-lg text-white/60 max-w-lg mx-auto">
+                Seleccione su perfil de acceso para continuar o cree una cuenta para probar la plataforma conectada en tiempo real.
               </p>
             </div>
-            <div className="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
-              <span className="font-label-bold text-brand-secondary-container uppercase">Explorar Ahora</span>
-              <span className="material-symbols-outlined text-brand-secondary-container text-sm">arrow_forward</span>
-            </div>
-          </button>
 
-          {/* Acceso Administrativo Card */}
-          <button 
-            className="group relative bg-white/5 border border-brand-secondary-container/20 hover:border-brand-secondary-container/40 p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[320px]"
-            onClick={() => setModalOpen(true)}
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary-container/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-brand-secondary-container/20 transition-all"></div>
-            <div>
-              <div className="mb-md">
-                <span 
-                  className="material-symbols-outlined text-[48px] text-brand-secondary-container group-hover:scale-110 transition-transform inline-block"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
+            {/* Role Selection Bento Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full max-w-4xl px-md mb-lg">
+              {/* Perfil Hincha Card */}
+              <button 
+                className="group relative bg-white/5 border border-white/10 hover:border-white/20 p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[300px]"
+                onClick={handleHinchaClick}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-brand-secondary/20 transition-all"></div>
+                <div>
+                  <div className="mb-md">
+                    <span className="material-symbols-outlined text-[48px] text-brand-secondary-container group-hover:scale-110 transition-transform inline-block">
+                      sports_soccer
+                    </span>
+                  </div>
+                  <h2 className="font-montserrat text-headline-md text-white mb-xs font-semibold">Perfil Hincha</h2>
+                  <p className="font-barlow text-body-md text-white/70">
+                    Acceso público a noticias de última hora, resultados en tiempo real y estadísticas oficiales de la liga.
+                  </p>
+                </div>
+                <div className="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
+                  <span className="font-label-bold text-brand-secondary-container uppercase">Explorar Ahora</span>
+                  <span className="material-symbols-outlined text-brand-secondary-container text-sm">arrow_forward</span>
+                </div>
+              </button>
+
+              {/* Acceso Administrativo Card */}
+              <button 
+                className="group relative bg-white/5 border border-brand-secondary-container/20 hover:border-brand-secondary-container/40 p-xl rounded-xl text-left transition-all duration-300 hover:scale-[1.02] hover:bg-white/10 overflow-hidden flex flex-col justify-between min-h-[300px]"
+                onClick={() => setModalOpen(true)}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-secondary-container/5 -mr-16 -mt-16 rounded-full blur-3xl group-hover:bg-brand-secondary-container/20 transition-all"></div>
+                <div>
+                  <div className="mb-md">
+                    <span 
+                      className="material-symbols-outlined text-[48px] text-brand-secondary-container group-hover:scale-110 transition-transform inline-block"
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      admin_panel_settings
+                    </span>
+                  </div>
+                  <h2 className="font-montserrat text-headline-md text-white mb-xs font-semibold">Acceso Administrativo</h2>
+                  <p className="font-barlow text-body-md text-white/70">
+                    Portal seguro para clubes, árbitros y personal de la LigaPro. Gestión de actas, disciplina y calendarios.
+                  </p>
+                </div>
+                <div className="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
+                  <span className="font-label-bold text-brand-secondary-container uppercase">Iniciar Sesión</span>
+                  <span className="material-symbols-outlined text-brand-secondary-container text-sm">lock</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Sign Up Navigation Trigger */}
+            <div className="text-center mt-md">
+              <p className="font-barlow text-body-lg text-white/50">
+                ¿No tienes una cuenta registrada en tu Supabase?{' '}
+                <button 
+                  onClick={() => {
+                    setIsRegistering(true);
+                    setError('');
+                  }}
+                  className="text-brand-secondary-container hover:underline font-bold"
                 >
-                  admin_panel_settings
-                </span>
-              </div>
-              <h2 className="font-montserrat text-headline-md text-white mb-xs font-semibold">Acceso Administrativo</h2>
-              <p className="font-barlow text-body-md text-white/70">
-                Portal seguro para clubes, árbitros y personal de la LigaPro. Gestión de actas, disciplina y calendarios.
+                  Regístrate aquí
+                </button>
               </p>
             </div>
-            <div className="flex items-center gap-base mt-lg group-hover:translate-x-2 transition-transform">
-              <span className="font-label-bold text-brand-secondary-container uppercase">Iniciar Sesión</span>
-              <span className="material-symbols-outlined text-brand-secondary-container text-sm">lock</span>
+          </>
+        ) : (
+          /* Sign Up Form Card */
+          <div className="bg-brand-primary-container border border-white/10 w-full max-w-lg p-xl rounded-xl shadow-2xl animate-fade-in">
+            <div className="text-center mb-lg">
+              <span className="material-symbols-outlined text-brand-secondary-container text-[48px] mb-base">person_add</span>
+              <h3 className="font-montserrat text-headline-md text-white font-bold">Crear Cuenta LigaPro</h3>
+              <p className="font-barlow text-body-md text-white/60">Regístrate directamente en tu base de datos de Supabase</p>
             </div>
-          </button>
-        </div>
+
+            <form className="space-y-md" onSubmit={handleRegisterSubmit}>
+              {error && (
+                <div className="bg-brand-error/20 border border-brand-error/50 text-red-200 text-xs p-sm rounded">
+                  {error}
+                </div>
+              )}
+
+              <div className="space-y-xs">
+                <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Tipo de Perfil</label>
+                <div className="grid grid-cols-2 gap-sm">
+                  <button
+                    type="button"
+                    onClick={() => setRegRoleType('hincha')}
+                    className={`py-2 rounded-lg font-montserrat font-bold text-xs transition-all border ${
+                      regRoleType === 'hincha'
+                        ? 'bg-brand-secondary-container text-brand-on-secondary-container border-brand-secondary-container'
+                        : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    Cuenta Hincha
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setRegRoleType('admin')}
+                    className={`py-2 rounded-lg font-montserrat font-bold text-xs transition-all border ${
+                      regRoleType === 'admin'
+                        ? 'bg-brand-secondary-container text-brand-on-secondary-container border-brand-secondary-container'
+                        : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    Cuenta Administrativa
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-xs">
+                <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Nombre Completo *</label>
+                <input
+                  type="text"
+                  required
+                  value={regName}
+                  onChange={e => setRegName(e.target.value)}
+                  placeholder="Ej. Roberto Bustamante"
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md"
+                />
+              </div>
+
+              {regRoleType === 'hincha' ? (
+                <div className="space-y-xs animate-fade-in">
+                  <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Club Favorito *</label>
+                  <select
+                    value={regClubId}
+                    onChange={e => setRegClubId(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md"
+                  >
+                    {clubs.map(c => (
+                      <option key={c.id} value={c.id} className="bg-brand-primary-container text-white">
+                        {c.name} ({c.series_id === 'series-a' ? 'Serie A' : 'Serie B'})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div className="space-y-xs animate-fade-in">
+                  <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Rol Operativo *</label>
+                  <select
+                    value={regAdminRole}
+                    onChange={e => setRegAdminRole(e.target.value as any)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md"
+                  >
+                    <option value="admin" className="bg-brand-primary-container text-white">Administrador General</option>
+                    <option value="maintenance_chief" className="bg-brand-primary-container text-white">Director de Escenarios</option>
+                    <option value="technician" className="bg-brand-primary-container text-white">Técnico Arbitral</option>
+                    <option value="manager" className="bg-brand-primary-container text-white">Coordinador del Torneo</option>
+                  </select>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={regLoading}
+                className="w-full bg-brand-secondary-container text-brand-on-secondary-container font-montserrat font-bold py-md rounded-lg hover:bg-brand-secondary-container/80 transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-xs disabled:opacity-50"
+              >
+                {regLoading ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-brand-primary"></div>
+                ) : (
+                  'REGISTRARSE Y ENTRAR'
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegistering(false);
+                  setError('');
+                }}
+                className="w-full text-center text-xs font-barlow text-white/60 hover:text-white uppercase tracking-wider hover:underline py-xs"
+              >
+                Volver a ingreso habitual
+              </button>
+            </form>
+          </div>
+        )}
 
         {/* Footer / Support */}
         <footer className="mt-xl flex flex-col items-center gap-sm opacity-50 hover:opacity-100 transition-opacity">
@@ -176,8 +381,8 @@ export const Login: React.FC = () => {
               <div className="space-y-xs">
                 <label className="font-barlow font-bold text-xs uppercase text-white/50 block ml-1">Usuario</label>
                 <input 
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all" 
-                  placeholder="ID de Empleado (p. ej. Miguel Ángel Loor o admin)" 
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all text-body-md" 
+                  placeholder="ID de Empleado (p. ej. admin o tu nombre de registro)" 
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -189,16 +394,9 @@ export const Login: React.FC = () => {
                   className="w-full bg-white/5 border border-white/10 rounded-lg p-md text-white focus:border-brand-secondary-container focus:ring-1 focus:ring-brand-secondary-container outline-none transition-all" 
                   placeholder="••••••••" 
                   type="password"
-                  disabled // Simulating static corporate password behavior
+                  disabled 
                 />
                 <span className="text-[10px] text-white/40 block ml-1 italic">*Para desarrollo, cualquier contraseña es válida (campo deshabilitado)</span>
-              </div>
-              <div className="flex items-center justify-between py-sm">
-                <label className="flex items-center gap-base cursor-pointer group">
-                  <input className="form-checkbox bg-transparent border-white/20 rounded text-brand-secondary-container focus:ring-0" type="checkbox" defaultChecked />
-                  <span className="font-barlow font-bold text-xs text-white/60 group-hover:text-white transition-colors">Recordarme</span>
-                </label>
-                <a className="font-barlow font-bold text-xs text-brand-secondary-container hover:underline" href="#">¿Olvidó su contraseña?</a>
               </div>
               <button 
                 type="submit"
@@ -210,7 +408,7 @@ export const Login: React.FC = () => {
             
             <div className="mt-lg pt-md border-t border-white/5 text-center">
               <p className="font-barlow text-[11px] text-white/40 italic">
-                Este sistema está monitoreado. El acceso no autorizado está prohibido por la normativa de seguridad de la LigaPro Ecuador.
+                Este sistema está monitoreado. Para ingresar sin cuenta previa, usa la opción de registro de la pantalla principal.
               </p>
             </div>
           </div>
