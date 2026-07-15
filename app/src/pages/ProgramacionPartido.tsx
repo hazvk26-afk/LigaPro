@@ -479,56 +479,54 @@ export const ProgramacionPartido: React.FC = () => {
             </div>
           </div>
 
-          {/* Edit Results Panel (Only visible when modifying an existing match) */}
-          {id && (
-            <div className="bg-white p-md rounded-xl border border-brand-outline-variant/30 shadow-sm space-y-md">
-              <h4 className="font-montserrat text-xs font-bold uppercase tracking-wider text-brand-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px]">sports_score</span>
-                Resultados y Estado de Partido
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-sm">
-                <div className="flex flex-col gap-1">
-                  <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Estado</label>
-                  <select 
-                    className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none transition-all"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as Match['status'])}
-                  >
-                    <option value="scheduled">Programado</option>
-                    <option value="live">En Vivo</option>
-                    <option value="finished">Finalizado</option>
-                    <option value="suspended">Suspendido</option>
-                    <option value="postponed">Postergado</option>
-                    <option value="walkover">Walkover (3-0)</option>
-                  </select>
-                </div>
-                
-                <div className="flex flex-col gap-1">
-                  <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Goles Local</label>
-                  <input 
-                    className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none"
-                    type="number"
-                    min={0}
-                    value={homeScore}
-                    onChange={(e) => setHomeScore(e.target.value === '' ? '' : Number(e.target.value))}
-                    disabled={status === 'scheduled'}
-                  />
-                </div>
-                
-                <div className="flex flex-col gap-1">
-                  <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Goles Visitante</label>
-                  <input 
-                    className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none"
-                    type="number"
-                    min={0}
-                    value={awayScore}
-                    onChange={(e) => setAwayScore(e.target.value === '' ? '' : Number(e.target.value))}
-                    disabled={status === 'scheduled'}
-                  />
-                </div>
+          {/* Edit Results Panel (Visible when creating or modifying a match) */}
+          <div className="bg-white p-md rounded-xl border border-brand-outline-variant/30 shadow-sm space-y-md">
+            <h4 className="font-montserrat text-xs font-bold uppercase tracking-wider text-brand-primary flex items-center gap-2">
+              <span className="material-symbols-outlined text-[18px]">sports_score</span>
+              Resultados y Estado de Partido
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-sm">
+              <div className="flex flex-col gap-1">
+                <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Estado</label>
+                <select 
+                  className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none transition-all"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as Match['status'])}
+                >
+                  <option value="scheduled">Programado</option>
+                  <option value="live">En Vivo</option>
+                  <option value="finished">Finalizado</option>
+                  <option value="suspended">Suspendido</option>
+                  <option value="postponed">Postergado</option>
+                  <option value="walkover">Walkover (3-0)</option>
+                </select>
+              </div>
+              
+              <div className="flex flex-col gap-1">
+                <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Goles Local</label>
+                <input 
+                  className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none"
+                  type="number"
+                  min={0}
+                  value={homeScore}
+                  onChange={(e) => setHomeScore(e.target.value === '' ? '' : Number(e.target.value))}
+                  disabled={status === 'scheduled'}
+                />
+              </div>
+              
+              <div className="flex flex-col gap-1">
+                <label className="font-barlow font-bold text-xs uppercase text-brand-outline">Goles Visitante</label>
+                <input 
+                  className="w-full bg-white border border-brand-outline-variant rounded-lg p-sm font-body-md focus:border-brand-secondary outline-none"
+                  type="number"
+                  min={0}
+                  value={awayScore}
+                  onChange={(e) => setAwayScore(e.target.value === '' ? '' : Number(e.target.value))}
+                  disabled={status === 'scheduled'}
+                />
               </div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Right Column: Officials Assignment (4 cols) */}
