@@ -16,6 +16,8 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { ProgramacionPartido } from './pages/ProgramacionPartido';
 import { GestionSanciones } from './pages/GestionSanciones';
 import { PerfilAdmin } from './pages/PerfilAdmin';
+import { GestionClubes } from './pages/GestionClubes';
+import { GeneradorFixtures } from './pages/GeneradorFixtures';
 
 const PublicLayoutWrapper = () => (
   <PublicLayout>
@@ -48,6 +50,8 @@ function App() {
           {/* Admin Protected Routes */}
           <Route element={<AdminLayoutWrapper />}>
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/clubes" element={<GestionClubes />} />
+            <Route path="/admin/fixtures" element={<GeneradorFixtures />} />
             <Route path="/admin/partidos/nuevo" element={<ProgramacionPartido />} />
             <Route path="/admin/partidos/:id/editar" element={<ProgramacionPartido />} />
             <Route path="/admin/sanciones" element={<GestionSanciones />} />
@@ -58,5 +62,6 @@ function App() {
     </AuthProvider>
   );
 }
+
 
 export default App;

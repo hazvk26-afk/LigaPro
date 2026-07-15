@@ -23,6 +23,8 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const menuItems = [
     { path: '/admin', label: 'Dashboard', icon: 'dashboard' },
+    { path: '/admin/clubes', label: 'Clubes', icon: 'shield' },
+    { path: '/admin/fixtures', label: 'Generar Fixture', icon: 'date_range' },
     { path: '/admin/sanciones', label: 'Sanciones', icon: 'gavel' },
     { path: '/admin/perfil', label: 'Mi Perfil', icon: 'person' },
   ];

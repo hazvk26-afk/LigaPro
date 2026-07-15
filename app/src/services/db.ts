@@ -147,6 +147,25 @@ export const insertMatchEvent = async (event: MatchEvent) => {
   return await supabase.from('match_events').insert(event);
 };
 
+export const insertClub = async (club: Club) => {
+  const dbClub = {
+    ...club,
+    series_id: SERIES_MAP_TO_DB[club.series_id] || club.series_id
+  };
+  return await supabase.from('clubs').insert(dbClub);
+};
+
+export const clearMatchesByPhase = async (seriesId: string, phaseId: string) => {
+  const dbSeriesId = SERIES_MAP_TO_DB[seriesId] || seriesId;
+  const dbPhaseId = PHASE_MAP_TO_DB[phaseId] || phaseId;
+  return await supabase
+    .from('matches')
+    .delete()
+    .eq('series_id', dbSeriesId)
+    .eq('phase_id', dbPhaseId);
+};
+
+
 // --- BUSINESS LOGIC ENGINE ---
 
 export interface ScheduleValidationResult {
